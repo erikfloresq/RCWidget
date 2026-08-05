@@ -1,0 +1,14 @@
+README.md
+  h_449d175d1440b9 13,18,23
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "e3fed8509ac518c10c1a6bc6abaa9941f76f7219",
+  "prompts": {},
+  "humans": {
+    "h_449d175d1440b9": {
+      "author": "Erik Flores <erik.flores@pedidosya.com>"
+    }
+  }
+}
