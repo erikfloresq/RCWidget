@@ -10,14 +10,17 @@ La aplicación consta de tres componentes visuales principales: un **Dashboard d
 
 ### 1. Dashboard de Configuración
 Un completo centro de control para configurar tus ciclos activos, ajustar preferencias de la app y visualizar el historial de RCs completadas.
+
 ![Dashboard de Configuración](screenshots/dashboard_view.png)
 
 ### 2. Widget de Escritorio Glassmórfico
 Un elegante y minimalista widget flotante con efecto de cristal esmerilado que se integra de manera fluida con tu fondo de pantalla y Spaces.
+
 ![Widget de Escritorio](screenshots/desktop_widget.png)
 
 ### 3. Widget de Barra de Menús (Dropdown)
 Acceso rápido e interactivo directamente desde la barra de estado de macOS para ver el progreso actual y realizar acciones rápidas.
+
 ![Widget de Barra de Menús](screenshots/menu_bar_widget.png)
 
 ---
