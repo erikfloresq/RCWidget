@@ -1,0 +1,16 @@
+RCWidget.xcodeproj/project.pbxproj
+  h_449d175d1440b9 400,432,462,483,503,522
+RCWidget.xcodeproj/xcuserdata/erik.flores.xcuserdatad/xcschemes/xcschememanagement.plist
+  h_449d175d1440b9 1-14
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "f988048d2f70ef1605d9b03e15e9c66be5359d9c",
+  "prompts": {},
+  "humans": {
+    "h_449d175d1440b9": {
+      "author": "Erik Flores <erik.flores@pedidosya.com>"
+    }
+  }
+}
