@@ -1,0 +1,16 @@
+RCWidget.xcodeproj/project.pbxproj
+  h_449d175d1440b9 400,432
+RCWidget/Assets.xcassets/AppIcon.appiconset/Contents.json
+  h_449d175d1440b9 4,10,16,22,28,34,40,46,52,58
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.20",
+  "base_commit_sha": "3f3d6f6c7ddbd68204a869240bca3c322915d5d8",
+  "prompts": {},
+  "humans": {
+    "h_449d175d1440b9": {
+      "author": "Erik Flores <erik.flores@pedidosya.com>"
+    }
+  }
+}
