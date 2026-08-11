@@ -1,27 +1,24 @@
 # 🗓️ RCWidget - macOS Release Candidate Cycle Tracker
 
-`RCWidget` es una aplicación nativa para macOS diseñada específicamente para desarrolladores y equipos de producto que necesitan monitorear y gestionar los ciclos de **Release Candidate (RC)**. Desarrollada de forma híbrida con **SwiftUI** y **AppKit**, ofrece una experiencia visualmente espectacular, interactiva y perfectamente integrada en el ecosistema de macOS.
+`RCWidget` es una aplicación nativa para macOS diseñada específicamente para desarrolladores y equipos de producto que necesitan monitorear y gestionar los ciclos de **Release Candidate (RC)**. Desarrollada con **SwiftUI** y **WidgetKit**, ofrece una experiencia visualmente cuidada e integrada de forma nativa en el ecosistema de macOS.
 
-La aplicación consta de tres componentes visuales principales: un **Dashboard de Configuración** completo, un **Widget de Escritorio Glassmórfico** flotante y un **Widget de Barra de Menús** altamente interactivo.
+La aplicación consta de cuatro componentes: un **Dashboard de Configuración** completo, un **Widget de WidgetKit** para el escritorio y el Centro de Notificaciones (con el diseño del anillo glassmórfico), un **Control del Centro de Control** para acceso rápido, y un **Widget de Barra de Menús** opcional (activable/desactivable desde el Dashboard).
 
 ---
 
-## 📸 Capturas de Pantalla (Interfaces Implementadas)
+## 📸 Capturas de Pantalla
+
+> ⚠️ Algunas capturas corresponden a la versión anterior (widget flotante y barra de menús) y serán reemplazadas por el nuevo widget de WidgetKit.
 
 ### 1. Dashboard de Configuración
-Un completo centro de control para configurar tus ciclos activos, ajustar preferencias de la app y visualizar el historial de RCs completadas.
+Un completo centro de control para configurar tus ciclos activos y visualizar el historial de RCs completadas.
 
 ![Dashboard de Configuración](screenshots/dashboard_view.png)
 
-### 2. Widget de Escritorio Glassmórfico
-Un elegante y minimalista widget flotante con efecto de cristal esmerilado que se integra de manera fluida con tu fondo de pantalla y Spaces.
+### 2. Widget de Escritorio (WidgetKit)
+Widget nativo con el diseño del anillo de progreso glassmórfico, disponible en tamaños pequeño y mediano para el escritorio y el Centro de Notificaciones.
 
 ![Widget de Escritorio](screenshots/desktop_widget.png)
-
-### 3. Widget de Barra de Menús (Dropdown)
-Acceso rápido e interactivo directamente desde la barra de estado de macOS para ver el progreso actual y realizar acciones rápidas.
-
-![Widget de Barra de Menús](screenshots/menu_bar_widget.png)
 
 ---
 
@@ -32,24 +29,22 @@ Acceso rápido e interactivo directamente desde la barra de estado de macOS para
 *   **Editor Dinámico de Ciclo:** Formulario reactivo para configurar el nombre del ciclo, la fecha de inicio y de término mediante selectores de fecha nativos de macOS (`DatePicker`).
 *   **Cálculo de Duración en Vivo:** Calcula e informa la duración total en días a medida que modificas las fechas, validando en tiempo real que la fecha de término sea posterior a la de inicio.
 *   **Historial y Archivo Automático:** Un panel derecho que recopila y muestra de forma cronológica inversa todos los ciclos finalizados con un check verde de completado, su rango de fechas y la duración total. Cuenta con la opción de limpiar el historial cuando se desee.
-*   **Preferencias del Sistema:** Toggles directos para habilitar/deshabilitar el widget de escritorio y activar el **modo Menu-Bar-Only** (que oculta o muestra dinámicamente el icono de la aplicación en el Dock).
+*   **Preferencias:** Toggle para mostrar u ocultar el icono de la barra de menús, más una guía para añadir el widget al escritorio y el control al Centro de Control.
 
-### 2. Widget de Escritorio Flotante e Interactivo (`DesktopWidgetView`)
-*   **Estética Glassmorphic Premium:** Utiliza `NSVisualEffectView` de AppKit con material de sistema `.hudWindow` para lograr un fondo traslúcido y esmerilado con bordes degradados de alta fidelidad que reaccionan a la luz del fondo de pantalla.
-*   **Indicador de Anillo Circular:** Un medidor circular interactivo pintado con un degradado dinámico (Cian ➡️ Azul ➡️ Púrpura) que ilustra el porcentaje completado del ciclo.
-*   **Soporte Multi-Espacio (Virtual Desktops):** Configurado con comportamientos de colección de ventana (`.canJoinAllSpaces` y `.fullScreenAuxiliary`) para flotar en todas las pantallas virtuales y escritorios virtuales sin desaparecer.
-*   **Interacción y Posicionamiento Persistente:** Ventana sin bordes y movible haciendo clic y arrastrando desde cualquier parte de su fondo. Guarda su última posición física automáticamente en `UserDefaults` para restaurarla perfectamente al iniciar la app.
-*   **Efectos Micro-Interactivos:** Detección de cursor (`onHover`) que revela sutilmente un botón de configuración para abrir instantáneamente el Dashboard con una animación fluida de opacidad y escala.
+### 2. Widget de WidgetKit para Escritorio y Centro de Notificaciones (`RCProgressWidget`)
+*   **Extensión Nativa de WidgetKit:** Corre en su propio proceso (`RCWidgetExtension`) y comparte los datos del ciclo con la app mediante un **App Group** (`group.dev.erikfloresq.RCWidget`).
+*   **Diseño del Anillo Glassmórfico:** Reutiliza el medidor circular con degradado dinámico (Cian ➡️ Azul ➡️ Púrpura) que ilustra el porcentaje completado del ciclo.
+*   **Tamaños Pequeño y Mediano:** El tamaño pequeño muestra el anillo; el mediano añade barra de progreso lineal, días transcurridos y tiempo restante.
+*   **Timeline Actualizada:** Genera entradas horarias para mantener frescos el contador de días, la barra de progreso y el texto de tiempo restante. La app llama a `WidgetCenter.reloadAllTimelines()` cada vez que cambian los datos.
 
-### 3. Widget Auxiliar en la Barra de Menús (`MenuBarWidgetView`)
-*   **Status Item Nativo:** Se posiciona en la barra de menú superior de macOS mostrando un icono de calendario y reloj con el título corto del ciclo activo (ej: `RC 1`).
-*   **Acciones Rápidas Dropdown:** Al hacer clic, despliega una vista compacta pero completa con:
-    *   Información detallada del ciclo activo (Fechas y días restantes).
-    *   Barra de progreso interactiva.
-    *   Botón para mostrar/ocultar el widget de escritorio en tiempo real.
-    *   Botón para **Forzar Rollover (Forzar Siguiente Ciclo)** manual.
-    *   Acceso directo para abrir el Dashboard de Configuración.
-    *   Opción para cerrar la aplicación de manera segura.
+### 3. Control del Centro de Control (`RCStatusControl`)
+*   **ControlWidget Nativo:** Aparece en el Centro de Control de macOS mostrando el ciclo activo y el día actual mediante un `ControlValueProvider`.
+*   **Acción Rápida:** Al pulsarlo ejecuta un `AppIntent` (`openAppWhenRun`) que abre la app RCWidget directamente en el Dashboard.
+
+### 4. Widget de Barra de Menús Opcional (`MenuBarWidgetView`)
+*   **Status Item Nativo:** `MenuBarExtra` que muestra un icono de calendario con el título corto del ciclo activo (ej: `RC 1`).
+*   **Dropdown Interactivo:** Información del ciclo, barra de progreso, **Forzar Siguiente Ciclo**, acceso al Dashboard y salida de la app.
+*   **Activable/Desactivable:** Se muestra u oculta desde el toggle de preferencias del Dashboard (persistido con `@AppStorage` vía `MenuBarExtra(isInserted:)`).
 
 ### 4. Automatización Inteligente y Lógica "Catch-Up"
 *   **Auto-Rollover de Ciclos:** Una vez que la fecha de término del ciclo activo expira, la aplicación archiva automáticamente el ciclo completado en el historial de forma permanente.
@@ -61,18 +56,18 @@ Acceso rápido e interactivo directamente desde la barra de estado de macOS para
 
 ## 🛠️ Stack Tecnológico
 
-*   **Lenguaje:** Swift 5.9+
-*   **Framework de Interfaz:** SwiftUI (Vistas reactivas, gradientes y animaciones)
-*   **Integración de Ventana:** AppKit (`NSWindow`, `NSVisualEffectView`, `NSHostingView`)
-*   **Persistencia Local:** `UserDefaults` con serialización `Codable` (`JSONEncoder` / `JSONDecoder`) para ciclos y configuraciones.
+*   **Lenguaje:** Swift 5
+*   **Framework de Interfaz:** SwiftUI (vistas reactivas, `MenuBarExtra`, gradientes y animaciones) con AppKit puntual (`NSApp`)
+*   **Widgets:** WidgetKit (`Widget`, `TimelineProvider`) y Control Center (`ControlWidget`, `AppIntents`)
+*   **Datos Compartidos:** App Group + `UserDefaults(suiteName:)` con serialización `Codable` para compartir los ciclos entre la app y la extensión.
 *   **Reactividad:** Combine (`Timer.publish`, `@Published`, `ObservableObject`)
-*   **Compatibilidad:** macOS 13.0 Ventura o superior
+*   **Compatibilidad:** macOS 26 o superior
 
 ---
 
 ## 📥 Instrucciones de Ejecución y Desarrollo
 
-1.  Asegúrate de contar con un equipo con **macOS 13.0+** y **Xcode 14.0+** instalado.
+1.  Asegúrate de contar con un equipo con **macOS 26+** y **Xcode 26+** instalado.
 2.  Clona el repositorio en tu máquina local:
     ```bash
     git clone https://github.com/erikfloresq/RCWidget.git
@@ -82,8 +77,10 @@ Acceso rápido e interactivo directamente desde la barra de estado de macOS para
     ```bash
     open RCWidget.xcodeproj
     ```
-4.  Selecciona el target de ejecución **RCWidget** y haz clic en **Run** (o presiona `Cmd + R`).
-5.  ¡Listo! Verás el icono del calendario aparecer en tu barra de menús en la esquina superior derecha. Haz clic en él para desplegar el widget o para abrir el Dashboard de Configuración principal.
+4.  Selecciona el target **RCWidget** y haz clic en **Run** (`Cmd + R`). Xcode registrará automáticamente el App Group y los perfiles de firma.
+5.  Configura tu ciclo en el Dashboard. Luego:
+    *   **Widget de escritorio:** clic derecho en el escritorio → **Editar widgets** → busca **RCWidget** y arrástralo al escritorio o al Centro de Notificaciones.
+    *   **Centro de Control:** abre el Centro de Control → **Editar controles** → añade el control **RC Tracker**.
 
 ---
 

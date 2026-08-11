@@ -6,7 +6,18 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		2E9397E60452D3A768EE446C /* RCWidgetExtension.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = C47F1E8751D917F516B2D55A /* RCWidgetExtension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
+		8F900B70EE228924926FE3AE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 0886164C2FC24F4A00D49EFC /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 211435E0815F6A17EE424DD6;
+			remoteInfo = RCWidgetExtension;
+		};
 		088616622FC24F4B00D49EFC /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 0886164C2FC24F4A00D49EFC /* Project object */;
@@ -24,12 +35,36 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		C47F1E8751D917F516B2D55A /* RCWidgetExtension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = RCWidgetExtension.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		088616542FC24F4A00D49EFC /* RCWidget.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RCWidget.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		088616612FC24F4B00D49EFC /* RCWidgetTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RCWidgetTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		0886166B2FC24F4B00D49EFC /* RCWidgetUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RCWidgetUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		EDAF6E0C0A16CEDBB3C179E1 /* Exceptions for "RCWidgetExtension" folder in "RCWidgetExtension" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = 211435E0815F6A17EE424DD6 /* RCWidgetExtension */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		F64B2A7820252474D2135C0C /* RCShared */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = RCShared;
+			sourceTree = "<group>";
+		};
+		97EC4C135742AFBDEAA323C4 /* RCWidgetExtension */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				EDAF6E0C0A16CEDBB3C179E1 /* Exceptions for "RCWidgetExtension" folder in "RCWidgetExtension" target */,
+			);
+			path = RCWidgetExtension;
+			sourceTree = "<group>";
+		};
 		088616562FC24F4A00D49EFC /* RCWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = RCWidget;
@@ -48,6 +83,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		6D87CA493537D6279EB6B6E4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		088616512FC24F4A00D49EFC /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -75,7 +117,9 @@
 		0886164B2FC24F4A00D49EFC = {
 			isa = PBXGroup;
 			children = (
+				F64B2A7820252474D2135C0C /* RCShared */,
 				088616562FC24F4A00D49EFC /* RCWidget */,
+				97EC4C135742AFBDEAA323C4 /* RCWidgetExtension */,
 				088616642FC24F4B00D49EFC /* RCWidgetTests */,
 				0886166E2FC24F4B00D49EFC /* RCWidgetUITests */,
 				088616552FC24F4A00D49EFC /* Products */,
@@ -88,6 +132,7 @@
 				088616542FC24F4A00D49EFC /* RCWidget.app */,
 				088616612FC24F4B00D49EFC /* RCWidgetTests.xctest */,
 				0886166B2FC24F4B00D49EFC /* RCWidgetUITests.xctest */,
+				C47F1E8751D917F516B2D55A /* RCWidgetExtension.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -102,13 +147,16 @@
 				088616502FC24F4A00D49EFC /* Sources */,
 				088616512FC24F4A00D49EFC /* Frameworks */,
 				088616522FC24F4A00D49EFC /* Resources */,
+				FCDDDF12E39E9C1D5C357B2D /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				3FE7B4100E04F51157DC5013 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				088616562FC24F4A00D49EFC /* RCWidget */,
+				F64B2A7820252474D2135C0C /* RCShared */,
 			);
 			name = RCWidget;
 			packageProductDependencies = (
@@ -116,6 +164,29 @@
 			productName = RCWidget;
 			productReference = 088616542FC24F4A00D49EFC /* RCWidget.app */;
 			productType = "com.apple.product-type.application";
+		};
+		211435E0815F6A17EE424DD6 /* RCWidgetExtension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 3FE1D1254CC4C7ADF6505724 /* Build configuration list for PBXNativeTarget "RCWidgetExtension" */;
+			buildPhases = (
+				4D7D9A66512131D2B727C8E4 /* Sources */,
+				6D87CA493537D6279EB6B6E4 /* Frameworks */,
+				9D27463F5DE6632137804EFD /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			fileSystemSynchronizedGroups = (
+				97EC4C135742AFBDEAA323C4 /* RCWidgetExtension */,
+				F64B2A7820252474D2135C0C /* RCShared */,
+			);
+			name = RCWidgetExtension;
+			packageProductDependencies = (
+			);
+			productName = RCWidgetExtension;
+			productReference = C47F1E8751D917F516B2D55A /* RCWidgetExtension.appex */;
+			productType = "com.apple.product-type.app-extension";
 		};
 		088616602FC24F4B00D49EFC /* RCWidgetTests */ = {
 			isa = PBXNativeTarget;
@@ -176,6 +247,9 @@
 					088616532FC24F4A00D49EFC = {
 						CreatedOnToolsVersion = 26.4;
 					};
+					211435E0815F6A17EE424DD6 = {
+						CreatedOnToolsVersion = 26.4;
+					};
 					088616602FC24F4B00D49EFC = {
 						CreatedOnToolsVersion = 26.4;
 						TestTargetID = 088616532FC24F4A00D49EFC;
@@ -201,13 +275,35 @@
 			projectRoot = "";
 			targets = (
 				088616532FC24F4A00D49EFC /* RCWidget */,
+				211435E0815F6A17EE424DD6 /* RCWidgetExtension */,
 				088616602FC24F4B00D49EFC /* RCWidgetTests */,
 				0886166A2FC24F4B00D49EFC /* RCWidgetUITests */,
 			);
 		};
 /* End PBXProject section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		FCDDDF12E39E9C1D5C357B2D /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				2E9397E60452D3A768EE446C /* RCWidgetExtension.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXResourcesBuildPhase section */
+		9D27463F5DE6632137804EFD /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		088616522FC24F4A00D49EFC /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -232,6 +328,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		4D7D9A66512131D2B727C8E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		088616502FC24F4A00D49EFC /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -256,6 +359,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		3FE7B4100E04F51157DC5013 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 211435E0815F6A17EE424DD6 /* RCWidgetExtension */;
+			targetProxy = 8F900B70EE228924926FE3AE /* PBXContainerItemProxy */;
+		};
 		088616632FC24F4B00D49EFC /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = 088616532FC24F4A00D49EFC /* RCWidget */;
@@ -269,6 +377,59 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		F6DD5E286E4D4B748198D4CF /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RCWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CPX7FN2K89;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = RCWidgetExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.erikfloresq.RCWidget.RCWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		2C2472375CE47C0EF6B37B2B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_ENTITLEMENTS = RCWidgetExtension.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CPX7FN2K89;
+				ENABLE_APP_SANDBOX = YES;
+				ENABLE_HARDENED_RUNTIME = YES;
+				GENERATE_INFOPLIST_FILE = NO;
+				INFOPLIST_FILE = RCWidgetExtension/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/../../../../Frameworks",
+				);
+				MACOSX_DEPLOYMENT_TARGET = 26.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = dev.erikfloresq.RCWidget.RCWidgetExtension;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				REGISTER_APP_GROUPS = YES;
+				SKIP_INSTALL = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
 		088616732FC24F4B00D49EFC /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -394,6 +555,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RCWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -426,6 +588,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = RCWidget.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
 				CURRENT_PROJECT_VERSION = 1;
@@ -536,6 +699,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		3FE1D1254CC4C7ADF6505724 /* Build configuration list for PBXNativeTarget "RCWidgetExtension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				F6DD5E286E4D4B748198D4CF /* Debug */,
+				2C2472375CE47C0EF6B37B2B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		0886164F2FC24F4A00D49EFC /* Build configuration list for PBXProject "RCWidget" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

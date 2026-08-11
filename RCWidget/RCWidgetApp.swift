@@ -10,16 +10,18 @@ import SwiftUI
 @main
 struct RCWidgetApp: App {
     @StateObject private var manager = RCCycleManager()
-    
+    @AppStorage("showMenuBarItem") private var showMenuBarItem = true
+
     var body: some Scene {
         // Main Dashboard window scene
         Window("RC Dashboard", id: "dashboard") {
             DashboardView(manager: manager)
                 .frame(minWidth: 720, minHeight: 520)
         }
-        
-        // Native interactive Menu Bar status item widget
-        MenuBarExtra {
+
+        // Native interactive Menu Bar status item widget.
+        // Its visibility is controlled by the "showMenuBarItem" preference.
+        MenuBarExtra(isInserted: $showMenuBarItem) {
             MenuBarWidgetView(manager: manager)
         } label: {
             HStack(spacing: 4) {
