@@ -390,10 +390,7 @@ struct MenuBarWidgetView: View {
     }
 
     private func formatDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "es_ES")
-        formatter.dateFormat = "d 'de' MMMM, yyyy"
-        return formatter.string(from: date)
+        date.formatted(.dateTime.day().month(.wide).year())
     }
 }
 
@@ -776,17 +773,11 @@ struct DashboardView: View {
     }
 
     private func formatFullDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "es_ES")
-        formatter.dateFormat = "d 'de' MMMM 'de' yyyy"
-        return formatter.string(from: date)
+        date.formatted(date: .long, time: .omitted)
     }
 
     private func formatShortDate(_ date: Date) -> String {
-        let formatter = DateFormatter()
-        formatter.locale = Locale(identifier: "es_ES")
-        formatter.dateFormat = "dd/MM/yyyy"
-        return formatter.string(from: date)
+        date.formatted(date: .numeric, time: .omitted)
     }
 }
 

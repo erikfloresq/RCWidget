@@ -30,14 +30,14 @@ struct RCControlValue {
 
 struct RCControlValueProvider: ControlValueProvider {
     var previewValue: RCControlValue {
-        RCControlValue(title: "RC 1", subtitle: "Día 1 de 7")
+        RCControlValue(title: "RC 1", subtitle: String(localized: "Día \(1) de \(7)"))
     }
 
     func currentValue() async throws -> RCControlValue {
         let cycle = RCStore.loadActiveCycle() ?? RCStore.placeholderCycle()
         return RCControlValue(
             title: cycle.title,
-            subtitle: "Día \(cycle.daysElapsed()) de \(cycle.durationDays)"
+            subtitle: String(localized: "Día \(cycle.daysElapsed()) de \(cycle.durationDays)")
         )
     }
 }

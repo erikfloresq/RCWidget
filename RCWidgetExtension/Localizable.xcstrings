@@ -1,0 +1,92 @@
+{
+  "sourceLanguage" : "es",
+  "strings" : {
+    "¡Ciclo Completado!" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cycle complete!"
+          }
+        }
+      }
+    },
+    "Abrir RCWidget" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open RCWidget"
+          }
+        }
+      }
+    },
+    "Día %lld de %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Day %1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "Día %lld/%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Day %1$lld/%2$lld"
+          }
+        }
+      }
+    },
+    "Muestra el ciclo activo y abre RCWidget." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows the active cycle and opens RCWidget."
+          }
+        }
+      }
+    },
+    "Muestra el progreso de tu ciclo de Release Candidate activo." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shows the progress of your active Release Candidate cycle."
+          }
+        }
+      }
+    },
+    "Quedan %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ left"
+          }
+        }
+      }
+    },
+    "Quedan unos segundos" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A few seconds left"
+          }
+        }
+      }
+    },
+    "RC Tracker" : {
+
+    },
+    "RC TRACKER" : {
+
+    }
+  },
+  "version" : "1.0"
+}

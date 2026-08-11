@@ -61,6 +61,7 @@ Widget nativo con el diseño del anillo de progreso glassmórfico, disponible en
 *   **Widgets:** WidgetKit (`Widget`, `TimelineProvider`) y Control Center (`ControlWidget`, `AppIntents`)
 *   **Datos Compartidos:** App Group + `UserDefaults(suiteName:)` con serialización `Codable` para compartir los ciclos entre la app y la extensión.
 *   **Reactividad:** Combine (`Timer.publish`, `@Published`, `ObservableObject`)
+*   **Localización:** String Catalogs (`.xcstrings`) en **español** (idioma base) e **inglés**, con fechas y duraciones formateadas según el locale del sistema (`Date.FormatStyle`, `DateComponentsFormatter`).
 *   **Compatibilidad:** macOS 26 o superior
 
 ---

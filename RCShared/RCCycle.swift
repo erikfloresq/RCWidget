@@ -79,26 +79,29 @@ extension RCCycle {
 
     func timeRemainingText(asOf now: Date = Date()) -> String {
         if now > endDate {
-            return "¡Ciclo Completado!"
+            return String(localized: "¡Ciclo Completado!")
         }
 
         let remaining = endDate.timeIntervalSince(now)
         let days = Int(remaining) / 86400
         let hours = (Int(remaining) % 86400) / 3600
-        let minutes = (Int(remaining) % 3600) / 60
 
+        // DateComponentsFormatter localiza y pluraliza las unidades según el
+        // locale actual (p. ej. "3 días, 5 horas" / "3 days, 5 hours").
+        let formatter = DateComponentsFormatter()
+        formatter.unitsStyle = .full
+        formatter.maximumUnitCount = 2
         if days > 0 {
-            if hours > 0 {
-                return "Quedan \(days) \(days == 1 ? "día" : "días") y \(hours) \(hours == 1 ? "hora" : "horas")"
-            } else {
-                return "Quedan \(days) \(days == 1 ? "día" : "días")"
-            }
+            formatter.allowedUnits = [.day, .hour]
         } else if hours > 0 {
-            return "Quedan \(hours) \(hours == 1 ? "hora" : "horas") y \(minutes) \(minutes == 1 ? "min" : "mins")"
-        } else if minutes > 0 {
-            return "Quedan \(minutes) \(minutes == 1 ? "minuto" : "minutos")"
+            formatter.allowedUnits = [.hour, .minute]
         } else {
-            return "Quedan unos segundos"
+            formatter.allowedUnits = [.minute]
         }
+
+        guard let value = formatter.string(from: remaining), !value.isEmpty else {
+            return String(localized: "Quedan unos segundos")
+        }
+        return String(localized: "Quedan \(value)")
     }
 }

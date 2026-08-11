@@ -92,7 +92,7 @@ struct RCProgressWidgetView: View {
             RCProgressRing(
                 progress: entry.cycle.progress(asOf: entry.date),
                 title: entry.cycle.title,
-                subtitle: "Día \(entry.cycle.daysElapsed(asOf: entry.date)) de \(entry.cycle.durationDays)"
+                subtitle: String(localized: "Día \(entry.cycle.daysElapsed(asOf: entry.date)) de \(entry.cycle.durationDays)")
             )
             .frame(maxHeight: .infinity)
 
@@ -111,7 +111,7 @@ struct RCProgressWidgetView: View {
             RCProgressRing(
                 progress: entry.cycle.progress(asOf: entry.date),
                 title: entry.cycle.title,
-                subtitle: "Día \(entry.cycle.daysElapsed(asOf: entry.date))/\(entry.cycle.durationDays)"
+                subtitle: String(localized: "Día \(entry.cycle.daysElapsed(asOf: entry.date))/\(entry.cycle.durationDays)")
             )
             .frame(width: 110, height: 110)
 

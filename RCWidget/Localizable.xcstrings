@@ -1,0 +1,375 @@
+{
+  "sourceLanguage" : "es",
+  "strings" : {
+    "" : {
+
+    },
+    "¡Ciclo Completado!" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cycle complete!"
+          }
+        }
+      }
+    },
+    "%@ - %@" : {
+      "localizations" : {
+        "es" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ - %2$@"
+          }
+        }
+      }
+    },
+    "%lld días" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld days"
+          }
+        }
+      }
+    },
+    "Abrir Dashboard de Configuración" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open Settings Dashboard"
+          }
+        }
+      }
+    },
+    "Activo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Active"
+          }
+        }
+      }
+    },
+    "CICLO ACTIVO" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ACTIVE CYCLE"
+          }
+        }
+      }
+    },
+    "Configura tus ciclos aquí y añade el widget al escritorio o al Centro de Control." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Configure your cycles here and add the widget to the desktop or Control Center."
+          }
+        }
+      }
+    },
+    "CONFIGURACIÓN DEL CICLO" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CYCLE CONFIGURATION"
+          }
+        }
+      }
+    },
+    "Control y Monitoreo del Ciclo de Release Candidates" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Track and monitor your Release Candidate cycle"
+          }
+        }
+      }
+    },
+    "Día %lld de %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Day %1$lld of %2$lld"
+          }
+        }
+      }
+    },
+    "Duración" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Duration"
+          }
+        }
+      }
+    },
+    "Ej: RC 1" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "e.g. RC 1"
+          }
+        }
+      }
+    },
+    "En curso" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In progress"
+          }
+        }
+      }
+    },
+    "Esta es una app nativa que gestiona tus ciclos de Release Candidate." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This is a native app that manages your Release Candidate cycles."
+          }
+        }
+      }
+    },
+    "Fecha Inicio" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start Date"
+          }
+        }
+      }
+    },
+    "Fecha Término" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "End Date"
+          }
+        }
+      }
+    },
+    "Forzar Siguiente Ciclo (Rollover)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Force Next Cycle (Rollover)"
+          }
+        }
+      }
+    },
+    "Forzar Siguiente RC" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Force Next RC"
+          }
+        }
+      }
+    },
+    "Guardar Cambios" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save Changes"
+          }
+        }
+      }
+    },
+    "Haz clic derecho en el escritorio → «Editar widgets» y añade RCWidget. También aparece en el Centro de Control como un control rápido." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Right-click the desktop → “Edit Widgets” and add RCWidget. It also appears in Control Center as a quick control."
+          }
+        }
+      }
+    },
+    "Historial de Ciclos" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cycle History"
+          }
+        }
+      }
+    },
+    "Limpiar" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clear"
+          }
+        }
+      }
+    },
+    "Los ciclos pasados se archivarán aquí automáticamente al completarse." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Past cycles are archived here automatically when completed."
+          }
+        }
+      }
+    },
+    "Mostrar icono en la barra de menús" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show menu bar icon"
+          }
+        }
+      }
+    },
+    "Nombre / Texto del Ciclo" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cycle Name / Label"
+          }
+        }
+      }
+    },
+    "PREFERENCIAS DE LA APLICACIÓN" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "APP PREFERENCES"
+          }
+        }
+      }
+    },
+    "Quedan %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ left"
+          }
+        }
+      }
+    },
+    "Quedan unos segundos" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A few seconds left"
+          }
+        }
+      }
+    },
+    "Rango: %@ al %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Range: %1$@ to %2$@"
+          }
+        }
+      }
+    },
+    "RC Dashboard" : {
+
+    },
+    "RCWidget" : {
+
+    },
+    "Release Candidates completados" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Completed Release Candidates"
+          }
+        }
+      }
+    },
+    "Resetear Ciclos" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reset Cycles"
+          }
+        }
+      }
+    },
+    "Revertir" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revert"
+          }
+        }
+      }
+    },
+    "Salir de RCWidget" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quit RCWidget"
+          }
+        }
+      }
+    },
+    "Sin Historial" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No History"
+          }
+        }
+      }
+    },
+    "v1.0.0 • Hecho en macOS" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "v1.0.0 • Made on macOS"
+          }
+        }
+      }
+    },
+    "WIDGET DE ESCRITORIO Y CENTRO DE CONTROL" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "DESKTOP WIDGET & CONTROL CENTER"
+          }
+        }
+      }
+    }
+  },
+  "version" : "1.0"
+}
