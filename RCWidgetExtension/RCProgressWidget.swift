@@ -89,6 +89,18 @@ struct RCProgressWidgetView: View {
     private var smallBody: some View {
         VStack(spacing: 8) {
             header
+
+            if let qsLabel = entry.cycle.quarterSprintLabel {
+                Text(qsLabel)
+                    .font(.system(size: 8, weight: .black))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 1.5)
+                    .background(Color.purple.opacity(0.35), in: Capsule())
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+            }
+
             RCProgressRing(
                 progress: entry.cycle.progress(asOf: entry.date),
                 title: entry.cycle.title,
@@ -117,6 +129,17 @@ struct RCProgressWidgetView: View {
 
             VStack(alignment: .leading, spacing: 10) {
                 header
+
+                if let qsLabel = entry.cycle.quarterSprintLabel {
+                    Text(qsLabel)
+                        .font(.system(size: 9, weight: .black))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(Color.purple.opacity(0.35), in: Capsule())
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                }
 
                 Text(entry.cycle.title)
                     .font(.system(size: 22, weight: .bold, design: .rounded))

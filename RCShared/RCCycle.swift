@@ -17,9 +17,32 @@ struct RCCycle: Codable, Identifiable, Equatable {
     var endDate: Date
     var durationDays: Int
 
-    init(id: UUID = UUID(), title: String, startDate: Date, endDate: Date, durationDays: Int? = nil) {
+    // MARK: Quarter / Sprint (opcional)
+    //
+    // Algunos equipos trabajan bajo sprints que corren en paralelo dentro de un
+    // trimestre (quarter). Estos campos permiten indicar, de forma opcional, en
+    // qué Q y sprint se encuentra el ciclo activo (p. ej. "Q1 · Sprint 2").
+    // La función está desactivada por defecto; el usuario debe activarla.
+    var quarterSprintEnabled: Bool
+    var quarter: Int
+    var sprint: Int
+
+    init(
+        id: UUID = UUID(),
+        title: String,
+        startDate: Date,
+        endDate: Date,
+        durationDays: Int? = nil,
+        quarterSprintEnabled: Bool = false,
+        quarter: Int = 1,
+        sprint: Int = 1
+    ) {
         self.id = id
         self.title = title
+
+        self.quarterSprintEnabled = quarterSprintEnabled
+        self.quarter = max(1, quarter)
+        self.sprint = max(1, sprint)
 
         let calendar = Calendar.current
         let start = calendar.startOfDay(for: startDate)
@@ -43,6 +66,31 @@ struct RCCycle: Codable, Identifiable, Equatable {
             let components = calendar.dateComponents([.day], from: start, to: finalEnd)
             self.durationDays = max(1, (components.day ?? 0) + 1)
         }
+    }
+
+    // Decodificación tolerante: los ciclos guardados por versiones anteriores no
+    // incluyen los campos de Quarter/Sprint, por lo que usamos valores por
+    // defecto (función desactivada) cuando faltan.
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.id = try container.decode(UUID.self, forKey: .id)
+        self.title = try container.decode(String.self, forKey: .title)
+        self.startDate = try container.decode(Date.self, forKey: .startDate)
+        self.endDate = try container.decode(Date.self, forKey: .endDate)
+        self.durationDays = try container.decode(Int.self, forKey: .durationDays)
+        self.quarterSprintEnabled = try container.decodeIfPresent(Bool.self, forKey: .quarterSprintEnabled) ?? false
+        self.quarter = max(1, try container.decodeIfPresent(Int.self, forKey: .quarter) ?? 1)
+        self.sprint = max(1, try container.decodeIfPresent(Int.self, forKey: .sprint) ?? 1)
+    }
+}
+
+// MARK: - Quarter / Sprint label
+
+extension RCCycle {
+    /// Etiqueta "Q1 · Sprint 2" cuando la función está activada; `nil` si no.
+    var quarterSprintLabel: String? {
+        guard quarterSprintEnabled else { return nil }
+        return String(localized: "Q\(quarter) · Sprint \(sprint)")
     }
 }
 

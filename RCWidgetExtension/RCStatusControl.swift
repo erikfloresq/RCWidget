@@ -35,10 +35,14 @@ struct RCControlValueProvider: ControlValueProvider {
 
     func currentValue() async throws -> RCControlValue {
         let cycle = RCStore.loadActiveCycle() ?? RCStore.placeholderCycle()
-        return RCControlValue(
-            title: cycle.title,
-            subtitle: String(localized: "Día \(cycle.daysElapsed()) de \(cycle.durationDays)")
-        )
+        let dayText = String(localized: "Día \(cycle.daysElapsed()) de \(cycle.durationDays)")
+        let subtitle: String
+        if let qsLabel = cycle.quarterSprintLabel {
+            subtitle = "\(qsLabel) · \(dayText)"
+        } else {
+            subtitle = dayText
+        }
+        return RCControlValue(title: cycle.title, subtitle: subtitle)
     }
 }
 

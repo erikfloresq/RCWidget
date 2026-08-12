@@ -133,7 +133,16 @@ class RCCycleManager: ObservableObject {
 
                 guard let nextEnd = calendar.date(byAdding: components, to: nextStart) else { break }
 
-                activeCycle = RCCycle(id: UUID(), title: nextTitle, startDate: nextStart, endDate: nextEnd, durationDays: nextDuration)
+                activeCycle = RCCycle(
+                    id: UUID(),
+                    title: nextTitle,
+                    startDate: nextStart,
+                    endDate: nextEnd,
+                    durationDays: nextDuration,
+                    quarterSprintEnabled: activeCycle.quarterSprintEnabled,
+                    quarter: activeCycle.quarter,
+                    sprint: activeCycle.sprint
+                )
                 updated = true
             } else {
                 break
@@ -147,7 +156,14 @@ class RCCycleManager: ObservableObject {
     }
 
     // Updates active cycle with manual configuration
-    func updateActiveCycle(title: String, startDate: Date, endDate: Date) {
+    func updateActiveCycle(
+        title: String,
+        startDate: Date,
+        endDate: Date,
+        quarterSprintEnabled: Bool = false,
+        quarter: Int = 1,
+        sprint: Int = 1
+    ) {
         let calendar = Calendar.current
         let cleanedStart = calendar.startOfDay(for: startDate)
 
@@ -161,6 +177,9 @@ class RCCycleManager: ObservableObject {
         activeCycle.startDate = cleanedStart
         activeCycle.endDate = cleanedEnd
         activeCycle.durationDays = duration
+        activeCycle.quarterSprintEnabled = quarterSprintEnabled
+        activeCycle.quarter = max(1, quarter)
+        activeCycle.sprint = max(1, sprint)
 
         saveToStore()
 
@@ -198,7 +217,16 @@ class RCCycleManager: ObservableObject {
 
         let nextEnd = calendar.date(byAdding: components, to: todayStart) ?? todayStart
 
-        activeCycle = RCCycle(id: UUID(), title: nextTitle, startDate: todayStart, endDate: nextEnd, durationDays: nextDuration)
+        activeCycle = RCCycle(
+            id: UUID(),
+            title: nextTitle,
+            startDate: todayStart,
+            endDate: nextEnd,
+            durationDays: nextDuration,
+            quarterSprintEnabled: activeCycle.quarterSprintEnabled,
+            quarter: activeCycle.quarter,
+            sprint: activeCycle.sprint
+        )
 
         saveToStore()
         objectWillChange.send()
@@ -265,6 +293,17 @@ struct MenuBarWidgetView: View {
                     .padding(.vertical, 2)
                     .background(Color.green.opacity(0.15))
                     .cornerRadius(6)
+                }
+
+                if let qsLabel = manager.activeCycle.quarterSprintLabel {
+                    Text(qsLabel)
+                        .font(.system(size: 10, weight: .black))
+                        .foregroundColor(.purple)
+                        .tracking(0.5)
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 3)
+                        .background(Color.purple.opacity(0.15))
+                        .cornerRadius(6)
                 }
 
                 Text(manager.activeCycle.title)
@@ -415,6 +454,9 @@ struct DashboardView: View {
     @State private var editTitle: String = ""
     @State private var editStartDate: Date = Date()
     @State private var editEndDate: Date = Date()
+    @State private var editQuarterSprintEnabled: Bool = false
+    @State private var editQuarter: Int = 1
+    @State private var editSprint: Int = 1
     @State private var hasUnsavedChanges: Bool = false
 
     init(manager: RCCycleManager) {
@@ -468,8 +510,20 @@ struct DashboardView: View {
                             .cornerRadius(5)
                     }
 
-                    Text(manager.activeCycle.title)
-                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                    HStack(alignment: .firstTextBaseline, spacing: 10) {
+                        Text(manager.activeCycle.title)
+                            .font(.system(size: 28, weight: .bold, design: .rounded))
+
+                        if let qsLabel = manager.activeCycle.quarterSprintLabel {
+                            Text(qsLabel)
+                                .font(.system(size: 11, weight: .black))
+                                .foregroundColor(.purple)
+                                .padding(.horizontal, 8)
+                                .padding(.vertical, 3)
+                                .background(Color.purple.opacity(0.15))
+                                .cornerRadius(6)
+                        }
+                    }
 
                     // Linear Progress Indicator
                     VStack(spacing: 6) {
@@ -559,12 +613,70 @@ struct DashboardView: View {
                         .padding(.top, 16)
                     }
 
+                    // Quarter / Sprint (opcional)
+                    Divider()
+                        .background(Color.white.opacity(0.06))
+
+                    VStack(alignment: .leading, spacing: 10) {
+                        Toggle(isOn: $editQuarterSprintEnabled) {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Mostrar Quarter y Sprint")
+                                    .font(.system(size: 11, weight: .bold))
+                                Text("Indica en qué Q y sprint del trimestre se encuentra este ciclo (ej: Q1 · Sprint 2).")
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.secondary)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                        .toggleStyle(.switch)
+                        .onChange(of: editQuarterSprintEnabled) { _ in checkForChanges() }
+
+                        if editQuarterSprintEnabled {
+                            HStack(spacing: 20) {
+                                Stepper(value: $editQuarter, in: 1...4) {
+                                    HStack(spacing: 6) {
+                                        Text("Quarter")
+                                            .font(.system(size: 11, weight: .bold))
+                                        Text("Q\(editQuarter)")
+                                            .font(.system(size: 13, weight: .black, design: .rounded))
+                                            .foregroundColor(.purple)
+                                    }
+                                }
+                                .onChange(of: editQuarter) { _ in checkForChanges() }
+
+                                Stepper(value: $editSprint, in: 1...99) {
+                                    HStack(spacing: 6) {
+                                        Text("Sprint")
+                                            .font(.system(size: 11, weight: .bold))
+                                        Text("\(editSprint)")
+                                            .font(.system(size: 13, weight: .black, design: .rounded))
+                                            .foregroundColor(.purple)
+                                    }
+                                }
+                                .onChange(of: editSprint) { _ in checkForChanges() }
+
+                                Spacer()
+
+                                Text("Q\(editQuarter) · Sprint \(editSprint)")
+                                    .font(.system(size: 11, weight: .black))
+                                    .foregroundColor(.purple)
+                                    .padding(.horizontal, 8)
+                                    .padding(.vertical, 3)
+                                    .background(Color.purple.opacity(0.15))
+                                    .cornerRadius(6)
+                            }
+                        }
+                    }
+
                     HStack {
                         Button(action: {
                             manager.updateActiveCycle(
                                 title: editTitle,
                                 startDate: editStartDate,
-                                endDate: editEndDate
+                                endDate: editEndDate,
+                                quarterSprintEnabled: editQuarterSprintEnabled,
+                                quarter: editQuarter,
+                                sprint: editSprint
                             )
                             hasUnsavedChanges = false
                         }) {
@@ -758,6 +870,9 @@ struct DashboardView: View {
         editTitle = manager.activeCycle.title
         editStartDate = manager.activeCycle.startDate
         editEndDate = manager.activeCycle.endDate
+        editQuarterSprintEnabled = manager.activeCycle.quarterSprintEnabled
+        editQuarter = manager.activeCycle.quarter
+        editSprint = manager.activeCycle.sprint
         hasUnsavedChanges = false
     }
 
@@ -769,7 +884,13 @@ struct DashboardView: View {
         let cleanedEnd = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: editEndDate) ?? editEndDate
         let hasEndChanged = calendar.startOfDay(for: cleanedEnd) != calendar.startOfDay(for: manager.activeCycle.endDate)
 
+        let hasQSEnabledChanged = editQuarterSprintEnabled != manager.activeCycle.quarterSprintEnabled
+        // Los cambios de Q/Sprint sólo cuentan cuando la función está activada.
+        let hasQuarterChanged = editQuarterSprintEnabled && editQuarter != manager.activeCycle.quarter
+        let hasSprintChanged = editQuarterSprintEnabled && editSprint != manager.activeCycle.sprint
+
         hasUnsavedChanges = hasTitleChanged || hasStartChanged || hasEndChanged
+            || hasQSEnabledChanged || hasQuarterChanged || hasSprintChanged
     }
 
     private func formatFullDate(_ date: Date) -> String {

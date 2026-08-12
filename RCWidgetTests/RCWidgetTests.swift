@@ -101,4 +101,89 @@ struct RCWidgetTests {
         #expect(calendar.component(.day, from: rc4.endDate) == 3)
         #expect(calendar.component(.month, from: rc4.endDate) == 2) // Feb 3, 2026
     }
+
+    // MARK: - Quarter / Sprint
+
+    @Test("Quarter/Sprint label is nil when disabled, formatted when enabled")
+    func testQuarterSprintLabel() {
+        let start = Date()
+        let end = Calendar.current.date(byAdding: .day, value: 6, to: start)!
+
+        // Disabled by default -> no label
+        let plain = RCCycle(title: "RC 3", startDate: start, endDate: end)
+        #expect(plain.quarterSprintEnabled == false)
+        #expect(plain.quarterSprintLabel == nil)
+
+        // Enabled -> "Q1 · Sprint 2"
+        let tagged = RCCycle(
+            title: "RC 3",
+            startDate: start,
+            endDate: end,
+            quarterSprintEnabled: true,
+            quarter: 1,
+            sprint: 2
+        )
+        #expect(tagged.quarterSprintLabel == "Q1 · Sprint 2")
+    }
+
+    @Test("Quarter and Sprint are clamped to a minimum of 1")
+    func testQuarterSprintClamping() {
+        let start = Date()
+        let end = Calendar.current.date(byAdding: .day, value: 6, to: start)!
+
+        let cycle = RCCycle(
+            title: "RC 1",
+            startDate: start,
+            endDate: end,
+            quarterSprintEnabled: true,
+            quarter: 0,
+            sprint: -3
+        )
+        #expect(cycle.quarter == 1)
+        #expect(cycle.sprint == 1)
+    }
+
+    @Test("Decoding legacy data without Quarter/Sprint fields keeps the feature disabled")
+    func testBackwardCompatibleDecoding() throws {
+        // JSON as produced by an older app version (no quarterSprint* keys).
+        let legacyJSON = """
+        {
+            "id": "\(UUID().uuidString)",
+            "title": "RC 5",
+            "startDate": 758160000,
+            "endDate": 758678399,
+            "durationDays": 7
+        }
+        """
+        let data = Data(legacyJSON.utf8)
+        let cycle = try JSONDecoder().decode(RCCycle.self, from: data)
+
+        #expect(cycle.title == "RC 5")
+        #expect(cycle.quarterSprintEnabled == false)
+        #expect(cycle.quarter == 1)
+        #expect(cycle.sprint == 1)
+        #expect(cycle.quarterSprintLabel == nil)
+    }
+
+    @Test("Quarter/Sprint survives an encode/decode round trip")
+    func testQuarterSprintRoundTrip() throws {
+        let start = Date()
+        let end = Calendar.current.date(byAdding: .day, value: 13, to: start)!
+        let original = RCCycle(
+            title: "RC 7",
+            startDate: start,
+            endDate: end,
+            quarterSprintEnabled: true,
+            quarter: 3,
+            sprint: 4
+        )
+
+        let data = try JSONEncoder().encode(original)
+        let decoded = try JSONDecoder().decode(RCCycle.self, from: data)
+
+        #expect(decoded.quarterSprintEnabled == true)
+        #expect(decoded.quarter == 3)
+        #expect(decoded.sprint == 4)
+        #expect(decoded.quarterSprintLabel == "Q3 · Sprint 4")
+    }
 }

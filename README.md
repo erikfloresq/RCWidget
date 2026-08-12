@@ -28,6 +28,7 @@ Widget nativo con el diseño del anillo de progreso glassmórfico, disponible en
 *   **Monitoreo del Ciclo Activo:** Tarjeta de resumen premium que muestra el progreso del ciclo actual en tiempo real mediante una barra de progreso lineal degradada en tonos cian y azul.
 *   **Editor Dinámico de Ciclo:** Formulario reactivo para configurar el nombre del ciclo, la fecha de inicio y de término mediante selectores de fecha nativos de macOS (`DatePicker`).
 *   **Cálculo de Duración en Vivo:** Calcula e informa la duración total en días a medida que modificas las fechas, validando en tiempo real que la fecha de término sea posterior a la de inicio.
+*   **Quarter y Sprint Opcionales:** Para equipos que trabajan con sprints en paralelo dentro de un trimestre, un toggle opcional (desactivado por defecto) permite indicar el número de **Quarter** (Q1–Q4) y el número de **Sprint** del ciclo. Al activarlo se muestra una etiqueta tipo `Q1 · Sprint 2` junto al RC activo en el Dashboard, el widget de barra de menús, el widget de escritorio y el Centro de Control. El valor se hereda automáticamente en los rollovers de ciclo.
 *   **Historial y Archivo Automático:** Un panel derecho que recopila y muestra de forma cronológica inversa todos los ciclos finalizados con un check verde de completado, su rango de fechas y la duración total. Cuenta con la opción de limpiar el historial cuando se desee.
 *   **Preferencias:** Toggle para mostrar u ocultar el icono de la barra de menús, más una guía para añadir el widget al escritorio y el control al Centro de Control.
 
