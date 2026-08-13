@@ -163,19 +163,68 @@ struct RCWidgetTests {
         #expect(cycle.quarter == 1)
         #expect(cycle.sprint == 1)
         #expect(cycle.quarterSprintLabel == nil)
+        // El rango de Q/Sprint cae de vuelta al rango del RC cuando falta.
+        #expect(cycle.quarterSprintStartDate == cycle.startDate)
+        #expect(cycle.quarterSprintEndDate == cycle.endDate)
+    }
+
+    @Test("Quarter/Sprint keeps an independent date range from the RC")
+    func testQuarterSprintIndependentRange() {
+        let calendar = Calendar.current
+        let rcStart = calendar.date(from: DateComponents(year: 2026, month: 1, day: 1))!
+        let rcEnd = calendar.date(from: DateComponents(year: 2026, month: 1, day: 7))!
+        // Sprint spans a wider, offset range than the RC.
+        let qsStart = calendar.date(from: DateComponents(year: 2026, month: 1, day: 5))!
+        let qsEnd = calendar.date(from: DateComponents(year: 2026, month: 1, day: 20))!
+
+        let cycle = RCCycle(
+            title: "RC 3",
+            startDate: rcStart,
+            endDate: rcEnd,
+            quarterSprintEnabled: true,
+            quarter: 1,
+            sprint: 2,
+            quarterSprintStartDate: qsStart,
+            quarterSprintEndDate: qsEnd
+        )
+
+        // RC range untouched by the Q/Sprint range.
+        #expect(cycle.durationDays == 7)
+        #expect(calendar.component(.day, from: cycle.startDate) == 1)
+        // Independent Q/Sprint range preserved and normalized (end of day).
+        #expect(calendar.component(.day, from: cycle.quarterSprintStartDate) == 5)
+        #expect(calendar.component(.day, from: cycle.quarterSprintEndDate) == 20)
+        #expect(calendar.component(.hour, from: cycle.quarterSprintEndDate) == 23)
+    }
+
+    @Test("Quarter/Sprint defaults its range to the RC range when unset")
+    func testQuarterSprintRangeFallsBackToRC() {
+        let calendar = Calendar.current
+        let start = calendar.date(from: DateComponents(year: 2026, month: 3, day: 1))!
+        let end = calendar.date(from: DateComponents(year: 2026, month: 3, day: 10))!
+
+        let cycle = RCCycle(title: "RC 1", startDate: start, endDate: end, quarterSprintEnabled: true)
+
+        #expect(cycle.quarterSprintStartDate == cycle.startDate)
+        #expect(cycle.quarterSprintEndDate == cycle.endDate)
     }
 
     @Test("Quarter/Sprint survives an encode/decode round trip")
     func testQuarterSprintRoundTrip() throws {
+        let calendar = Calendar.current
         let start = Date()
-        let end = Calendar.current.date(byAdding: .day, value: 13, to: start)!
+        let end = calendar.date(byAdding: .day, value: 13, to: start)!
+        let qsStart = calendar.date(byAdding: .day, value: -2, to: start)!
+        let qsEnd = calendar.date(byAdding: .day, value: 30, to: start)!
         let original = RCCycle(
             title: "RC 7",
             startDate: start,
             endDate: end,
             quarterSprintEnabled: true,
             quarter: 3,
-            sprint: 4
+            sprint: 4,
+            quarterSprintStartDate: qsStart,
+            quarterSprintEndDate: qsEnd
         )
 
         let data = try JSONEncoder().encode(original)
@@ -185,5 +234,7 @@ struct RCWidgetTests {
         #expect(decoded.quarter == 3)
         #expect(decoded.sprint == 4)
         #expect(decoded.quarterSprintLabel == "Q3 · Sprint 4")
+        #expect(decoded.quarterSprintStartDate == original.quarterSprintStartDate)
+        #expect(decoded.quarterSprintEndDate == original.quarterSprintEndDate)
     }
 }

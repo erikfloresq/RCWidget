@@ -4,12 +4,52 @@
     "" : {
 
     },
-    "Indica en qué Q y sprint del trimestre se encuentra este ciclo (ej: Q1 · Sprint 2)." : {
+    "Indica en qué Q y sprint del trimestre se encuentra el equipo. Tiene su propio rango de fechas, independiente del RC (ej: Q1 · Sprint 2)." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Indicates which Q and sprint of the quarter this cycle belongs to (e.g. Q1 · Sprint 2)."
+            "value" : "Indicates which Q and sprint of the quarter the team is on. It has its own date range, independent from the RC (e.g. Q1 · Sprint 2)."
+          }
+        }
+      }
+    },
+    "Inicio Q/Sprint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q/Sprint start"
+          }
+        }
+      }
+    },
+    "Rango Q/Sprint: %@ al %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q/Sprint range: %1$@ to %2$@"
+          }
+        }
+      }
+    },
+    "Rango RC: %@ al %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RC range: %1$@ to %2$@"
+          }
+        }
+      }
+    },
+    "Término Q/Sprint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q/Sprint end"
           }
         }
       }

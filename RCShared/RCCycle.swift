@@ -21,11 +21,34 @@ struct RCCycle: Codable, Identifiable, Equatable {
     //
     // Algunos equipos trabajan bajo sprints que corren en paralelo dentro de un
     // trimestre (quarter). Estos campos permiten indicar, de forma opcional, en
-    // qué Q y sprint se encuentra el ciclo activo (p. ej. "Q1 · Sprint 2").
+    // qué Q y sprint se encuentra el equipo (p. ej. "Q1 · Sprint 2").
     // La función está desactivada por defecto; el usuario debe activarla.
+    //
+    // El ciclo de Quarter/Sprint tiene su PROPIO rango de fechas, independiente
+    // del rango del RC, porque un sprint suele correr en paralelo y no coincide
+    // necesariamente con el ciclo de Release Candidate.
     var quarterSprintEnabled: Bool
     var quarter: Int
     var sprint: Int
+    var quarterSprintStartDate: Date
+    var quarterSprintEndDate: Date
+
+    /// Normaliza una fecha de inicio al comienzo del día (00:00:00).
+    static func normalizedStart(_ date: Date, calendar: Calendar = .current) -> Date {
+        calendar.startOfDay(for: date)
+    }
+
+    /// Normaliza una fecha de término al final del día (23:59:59) y garantiza
+    /// que no sea anterior a `notBefore`.
+    static func normalizedEnd(_ date: Date, notBefore: Date, calendar: Calendar = .current) -> Date {
+        let end = calendar.startOfDay(for: date)
+        let finalEnd = end < notBefore ? notBefore : end
+        var endComponents = calendar.dateComponents([.year, .month, .day], from: finalEnd)
+        endComponents.hour = 23
+        endComponents.minute = 59
+        endComponents.second = 59
+        return calendar.date(from: endComponents) ?? finalEnd
+    }
 
     init(
         id: UUID = UUID(),
@@ -35,7 +58,9 @@ struct RCCycle: Codable, Identifiable, Equatable {
         durationDays: Int? = nil,
         quarterSprintEnabled: Bool = false,
         quarter: Int = 1,
-        sprint: Int = 1
+        sprint: Int = 1,
+        quarterSprintStartDate: Date? = nil,
+        quarterSprintEndDate: Date? = nil
     ) {
         self.id = id
         self.title = title
@@ -45,32 +70,30 @@ struct RCCycle: Codable, Identifiable, Equatable {
         self.sprint = max(1, sprint)
 
         let calendar = Calendar.current
-        let start = calendar.startOfDay(for: startDate)
-        let end = calendar.startOfDay(for: endDate)
-
+        let start = RCCycle.normalizedStart(startDate, calendar: calendar)
         self.startDate = start
-
-        // Ensure endDate is at least the startDate
-        let finalEnd = end < start ? start : end
-
-        // Set end date to the end of that day (23:59:59)
-        var endComponents = calendar.dateComponents([.year, .month, .day], from: finalEnd)
-        endComponents.hour = 23
-        endComponents.minute = 59
-        endComponents.second = 59
-        self.endDate = calendar.date(from: endComponents) ?? finalEnd
+        self.endDate = RCCycle.normalizedEnd(endDate, notBefore: start, calendar: calendar)
 
         if let duration = durationDays {
             self.durationDays = duration
         } else {
-            let components = calendar.dateComponents([.day], from: start, to: finalEnd)
+            let components = calendar.dateComponents([.day], from: start, to: self.endDate)
             self.durationDays = max(1, (components.day ?? 0) + 1)
         }
+
+        // Rango de Q/Sprint: si no se especifica, cae de vuelta al rango del RC.
+        let qsStart = RCCycle.normalizedStart(quarterSprintStartDate ?? startDate, calendar: calendar)
+        self.quarterSprintStartDate = qsStart
+        self.quarterSprintEndDate = RCCycle.normalizedEnd(
+            quarterSprintEndDate ?? endDate,
+            notBefore: qsStart,
+            calendar: calendar
+        )
     }
 
     // Decodificación tolerante: los ciclos guardados por versiones anteriores no
     // incluyen los campos de Quarter/Sprint, por lo que usamos valores por
-    // defecto (función desactivada) cuando faltan.
+    // defecto (función desactivada, rango igual al del RC) cuando faltan.
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         self.id = try container.decode(UUID.self, forKey: .id)
@@ -81,6 +104,8 @@ struct RCCycle: Codable, Identifiable, Equatable {
         self.quarterSprintEnabled = try container.decodeIfPresent(Bool.self, forKey: .quarterSprintEnabled) ?? false
         self.quarter = max(1, try container.decodeIfPresent(Int.self, forKey: .quarter) ?? 1)
         self.sprint = max(1, try container.decodeIfPresent(Int.self, forKey: .sprint) ?? 1)
+        self.quarterSprintStartDate = try container.decodeIfPresent(Date.self, forKey: .quarterSprintStartDate) ?? startDate
+        self.quarterSprintEndDate = try container.decodeIfPresent(Date.self, forKey: .quarterSprintEndDate) ?? endDate
     }
 }
 
