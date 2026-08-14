@@ -203,6 +203,19 @@ class RCCycleManager: ObservableObject {
         objectWillChange.send()
     }
 
+    /// Aplica de inmediato el estado del toggle "Mostrar Quarter y Sprint".
+    ///
+    /// Es una preferencia de visualización: al activarla/desactivarla se refleja
+    /// al instante en todas las superficies (menú de barra y widgets) sin esperar
+    /// a "Guardar Cambios". El número de Q/Sprint y su rango se siguen editando
+    /// con el botón de guardar. Al mutar `activeCycle`, su `didSet` persiste el
+    /// cambio y recarga los widgets.
+    func setQuarterSprintDisplay(enabled: Bool) {
+        guard activeCycle.quarterSprintEnabled != enabled else { return }
+        activeCycle.quarterSprintEnabled = enabled
+        objectWillChange.send()
+    }
+
     // Forces immediately rolling over to next cycle manually (useful for testing)
     func forceSkipToNextCycle() {
         let calendar = Calendar.current
@@ -664,7 +677,13 @@ struct DashboardView: View {
                             }
                         }
                         .toggleStyle(.switch)
-                        .onChange(of: editQuarterSprintEnabled) { _ in checkForChanges() }
+                        .onChange(of: editQuarterSprintEnabled) { newValue in
+                            // Aplica de inmediato la preferencia de visualización
+                            // para que el menú de barra y los widgets se refresquen
+                            // sin esperar a "Guardar Cambios".
+                            manager.setQuarterSprintDisplay(enabled: newValue)
+                            checkForChanges()
+                        }
 
                         if editQuarterSprintEnabled {
                             HStack(spacing: 20) {
