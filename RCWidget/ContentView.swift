@@ -140,7 +140,6 @@ class RCCycleManager: ObservableObject {
                     endDate: nextEnd,
                     durationDays: nextDuration,
                     quarterSprintEnabled: activeCycle.quarterSprintEnabled,
-                    quarter: activeCycle.quarter,
                     sprint: activeCycle.sprint,
                     quarterSprintStartDate: activeCycle.quarterSprintStartDate,
                     quarterSprintEndDate: activeCycle.quarterSprintEndDate
@@ -149,6 +148,15 @@ class RCCycleManager: ObservableObject {
             } else {
                 break
             }
+        }
+
+        // Auto-avance del sprint (independiente del RC): si su rango ya venció,
+        // incrementa el número de sprint y desplaza el rango hacia adelante. El
+        // quarter se recalcula solo a partir del mes de inicio.
+        let advanced = activeCycle.advancingSprint()
+        if advanced != activeCycle {
+            activeCycle = advanced
+            updated = true
         }
 
         if updated {
@@ -163,7 +171,6 @@ class RCCycleManager: ObservableObject {
         startDate: Date,
         endDate: Date,
         quarterSprintEnabled: Bool = false,
-        quarter: Int = 1,
         sprint: Int = 1,
         quarterSprintStartDate: Date? = nil,
         quarterSprintEndDate: Date? = nil
@@ -182,7 +189,6 @@ class RCCycleManager: ObservableObject {
         activeCycle.endDate = cleanedEnd
         activeCycle.durationDays = duration
         activeCycle.quarterSprintEnabled = quarterSprintEnabled
-        activeCycle.quarter = max(1, quarter)
         activeCycle.sprint = max(1, sprint)
 
         // Rango propio del ciclo Q/Sprint (cae al rango del RC si no se define).
@@ -250,7 +256,6 @@ class RCCycleManager: ObservableObject {
             endDate: nextEnd,
             durationDays: nextDuration,
             quarterSprintEnabled: activeCycle.quarterSprintEnabled,
-            quarter: activeCycle.quarter,
             sprint: activeCycle.sprint,
             quarterSprintStartDate: activeCycle.quarterSprintStartDate,
             quarterSprintEndDate: activeCycle.quarterSprintEndDate
@@ -483,11 +488,15 @@ struct DashboardView: View {
     @State private var editStartDate: Date = Date()
     @State private var editEndDate: Date = Date()
     @State private var editQuarterSprintEnabled: Bool = false
-    @State private var editQuarter: Int = 1
     @State private var editSprint: Int = 1
     @State private var editQuarterSprintStartDate: Date = Date()
     @State private var editQuarterSprintEndDate: Date = Date()
     @State private var hasUnsavedChanges: Bool = false
+
+    // El quarter (Q) no se edita: se deriva del mes de inicio del sprint.
+    private var editQuarter: Int {
+        RCCycle.quarter(for: editQuarterSprintStartDate)
+    }
 
     init(manager: RCCycleManager) {
         self.manager = manager
@@ -687,17 +696,6 @@ struct DashboardView: View {
 
                         if editQuarterSprintEnabled {
                             HStack(spacing: 20) {
-                                Stepper(value: $editQuarter, in: 1...4) {
-                                    HStack(spacing: 6) {
-                                        Text("Quarter")
-                                            .font(.system(size: 11, weight: .bold))
-                                        Text("Q\(editQuarter)")
-                                            .font(.system(size: 13, weight: .black, design: .rounded))
-                                            .foregroundColor(.purple)
-                                    }
-                                }
-                                .onChange(of: editQuarter) { _ in checkForChanges() }
-
                                 Stepper(value: $editSprint, in: 1...99) {
                                     HStack(spacing: 6) {
                                         Text("Sprint")
@@ -708,6 +706,18 @@ struct DashboardView: View {
                                     }
                                 }
                                 .onChange(of: editSprint) { _ in checkForChanges() }
+
+                                // Quarter derivado (solo lectura): depende del mes de inicio.
+                                HStack(spacing: 6) {
+                                    Text("Quarter")
+                                        .font(.system(size: 11, weight: .bold))
+                                    Text("Q\(editQuarter)")
+                                        .font(.system(size: 13, weight: .black, design: .rounded))
+                                        .foregroundColor(.purple)
+                                    Image(systemName: "wand.and.stars")
+                                        .font(.system(size: 9))
+                                        .foregroundColor(.secondary)
+                                }
 
                                 Spacer()
 
@@ -750,6 +760,11 @@ struct DashboardView: View {
                                 }
                                 .padding(.top, 16)
                             }
+
+                            Text("El quarter (Q) se calcula automáticamente según el mes de inicio del sprint (Q1 ene–mar, Q2 abr–jun, Q3 jul–sep, Q4 oct–dic). El sprint avanza solo cuando su rango vence.")
+                                .font(.system(size: 10))
+                                .foregroundColor(.secondary)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                     }
 
@@ -760,7 +775,6 @@ struct DashboardView: View {
                                 startDate: editStartDate,
                                 endDate: editEndDate,
                                 quarterSprintEnabled: editQuarterSprintEnabled,
-                                quarter: editQuarter,
                                 sprint: editSprint,
                                 quarterSprintStartDate: editQuarterSprintStartDate,
                                 quarterSprintEndDate: editQuarterSprintEndDate
@@ -961,7 +975,6 @@ struct DashboardView: View {
         editStartDate = manager.activeCycle.startDate
         editEndDate = manager.activeCycle.endDate
         editQuarterSprintEnabled = manager.activeCycle.quarterSprintEnabled
-        editQuarter = manager.activeCycle.quarter
         editSprint = manager.activeCycle.sprint
         editQuarterSprintStartDate = manager.activeCycle.quarterSprintStartDate
         editQuarterSprintEndDate = manager.activeCycle.quarterSprintEndDate
@@ -978,7 +991,7 @@ struct DashboardView: View {
 
         let hasQSEnabledChanged = editQuarterSprintEnabled != manager.activeCycle.quarterSprintEnabled
         // Los cambios de Q/Sprint sólo cuentan cuando la función está activada.
-        let hasQuarterChanged = editQuarterSprintEnabled && editQuarter != manager.activeCycle.quarter
+        // (El quarter no se compara: se deriva de la fecha de inicio del sprint.)
         let hasSprintChanged = editQuarterSprintEnabled && editSprint != manager.activeCycle.sprint
 
         let qsCleanedEnd = calendar.date(bySettingHour: 23, minute: 59, second: 59, of: editQuarterSprintEndDate) ?? editQuarterSprintEndDate
@@ -988,7 +1001,7 @@ struct DashboardView: View {
             && calendar.startOfDay(for: qsCleanedEnd) != calendar.startOfDay(for: manager.activeCycle.quarterSprintEndDate)
 
         hasUnsavedChanges = hasTitleChanged || hasStartChanged || hasEndChanged
-            || hasQSEnabledChanged || hasQuarterChanged || hasSprintChanged
+            || hasQSEnabledChanged || hasSprintChanged
             || hasQSStartChanged || hasQSEndChanged
     }
 

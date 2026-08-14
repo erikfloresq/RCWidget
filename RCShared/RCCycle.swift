@@ -27,11 +27,25 @@ struct RCCycle: Codable, Identifiable, Equatable {
     // El ciclo de Quarter/Sprint tiene su PROPIO rango de fechas, independiente
     // del rango del RC, porque un sprint suele correr en paralelo y no coincide
     // necesariamente con el ciclo de Release Candidate.
+    //
+    // El número de sprint se guarda y avanza automáticamente (ver
+    // `advancingSprint`). El quarter (Q) NO se guarda: se deriva del mes de la
+    // fecha de inicio del sprint según los trimestres calendario (Q1 = ene–mar,
+    // Q2 = abr–jun, Q3 = jul–sep, Q4 = oct–dic).
     var quarterSprintEnabled: Bool
-    var quarter: Int
     var sprint: Int
     var quarterSprintStartDate: Date
     var quarterSprintEndDate: Date
+
+    /// Quarter calendario (1–4) correspondiente al mes de `date`.
+    /// Q1 = ene–mar, Q2 = abr–jun, Q3 = jul–sep, Q4 = oct–dic.
+    static func quarter(for date: Date, calendar: Calendar = .current) -> Int {
+        let month = calendar.component(.month, from: date)
+        return (month - 1) / 3 + 1
+    }
+
+    /// Quarter derivado del mes de inicio del rango de Q/Sprint.
+    var quarter: Int { RCCycle.quarter(for: quarterSprintStartDate) }
 
     /// Normaliza una fecha de inicio al comienzo del día (00:00:00).
     static func normalizedStart(_ date: Date, calendar: Calendar = .current) -> Date {
@@ -57,7 +71,6 @@ struct RCCycle: Codable, Identifiable, Equatable {
         endDate: Date,
         durationDays: Int? = nil,
         quarterSprintEnabled: Bool = false,
-        quarter: Int = 1,
         sprint: Int = 1,
         quarterSprintStartDate: Date? = nil,
         quarterSprintEndDate: Date? = nil
@@ -66,7 +79,6 @@ struct RCCycle: Codable, Identifiable, Equatable {
         self.title = title
 
         self.quarterSprintEnabled = quarterSprintEnabled
-        self.quarter = max(1, quarter)
         self.sprint = max(1, sprint)
 
         let calendar = Calendar.current
@@ -102,7 +114,6 @@ struct RCCycle: Codable, Identifiable, Equatable {
         self.endDate = try container.decode(Date.self, forKey: .endDate)
         self.durationDays = try container.decode(Int.self, forKey: .durationDays)
         self.quarterSprintEnabled = try container.decodeIfPresent(Bool.self, forKey: .quarterSprintEnabled) ?? false
-        self.quarter = max(1, try container.decodeIfPresent(Int.self, forKey: .quarter) ?? 1)
         self.sprint = max(1, try container.decodeIfPresent(Int.self, forKey: .sprint) ?? 1)
         self.quarterSprintStartDate = try container.decodeIfPresent(Date.self, forKey: .quarterSprintStartDate) ?? startDate
         self.quarterSprintEndDate = try container.decodeIfPresent(Date.self, forKey: .quarterSprintEndDate) ?? endDate
@@ -116,6 +127,48 @@ extension RCCycle {
     var quarterSprintLabel: String? {
         guard quarterSprintEnabled else { return nil }
         return String(localized: "Q\(quarter) · Sprint \(sprint)")
+    }
+}
+
+// MARK: - Sprint auto-advance (puro, basado en una fecha de referencia)
+
+extension RCCycle {
+    /// Devuelve una copia del ciclo con el sprint avanzado hasta que su rango de
+    /// fechas contenga a `now`. Por cada periodo de sprint ya vencido incrementa
+    /// el número de sprint y desplaza el rango hacia adelante (heredando la misma
+    /// duración), de forma análoga al auto-rollover del RC. El quarter se
+    /// recalcula solo, porque se deriva del mes de inicio del nuevo rango.
+    ///
+    /// Si la función de Q/Sprint está desactivada, se devuelve sin cambios.
+    func advancingSprint(asOf now: Date = Date(), calendar: Calendar = .current) -> RCCycle {
+        guard quarterSprintEnabled else { return self }
+
+        var result = self
+        let todayStart = calendar.startOfDay(for: now)
+
+        while true {
+            let endStart = calendar.startOfDay(for: result.quarterSprintEndDate)
+            // El siguiente sprint empieza el día después de que termina el actual.
+            guard let nextStart = calendar.date(byAdding: .day, value: 1, to: endStart) else { break }
+
+            // Solo avanza si hoy ya alcanzó (o pasó) el inicio del siguiente sprint.
+            guard todayStart >= nextStart else { break }
+
+            let duration = daysBetweenInclusive(start: result.quarterSprintStartDate, end: result.quarterSprintEndDate)
+
+            var components = DateComponents()
+            components.day = duration - 1
+            components.hour = 23
+            components.minute = 59
+            components.second = 59
+            guard let nextEnd = calendar.date(byAdding: components, to: nextStart) else { break }
+
+            result.sprint += 1
+            result.quarterSprintStartDate = nextStart
+            result.quarterSprintEndDate = nextEnd
+        }
+
+        return result
     }
 }
 

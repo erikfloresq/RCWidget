@@ -4,6 +4,16 @@
     "" : {
 
     },
+    "El quarter (Q) se calcula automáticamente según el mes de inicio del sprint (Q1 ene–mar, Q2 abr–jun, Q3 jul–sep, Q4 oct–dic). El sprint avanza solo cuando su rango vence." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The quarter (Q) is computed automatically from the sprint's start month (Q1 Jan–Mar, Q2 Apr–Jun, Q3 Jul–Sep, Q4 Oct–Dec). The sprint advances on its own when its range ends."
+          }
+        }
+      }
+    },
     "Indica en qué Q y sprint del trimestre se encuentra el equipo. Tiene su propio rango de fechas, independiente del RC (ej: Q1 · Sprint 2)." : {
       "localizations" : {
         "en" : {
