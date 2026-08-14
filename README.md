@@ -28,13 +28,17 @@ Widget nativo con el diseño del anillo de progreso glassmórfico, disponible en
 *   **Monitoreo del Ciclo Activo:** Tarjeta de resumen premium que muestra el progreso del ciclo actual en tiempo real mediante una barra de progreso lineal degradada en tonos cian y azul.
 *   **Editor Dinámico de Ciclo:** Formulario reactivo para configurar el nombre del ciclo, la fecha de inicio y de término mediante selectores de fecha nativos de macOS (`DatePicker`).
 *   **Cálculo de Duración en Vivo:** Calcula e informa la duración total en días a medida que modificas las fechas, validando en tiempo real que la fecha de término sea posterior a la de inicio.
+*   **Quarter y Sprint Opcionales con Rango Propio:** Para equipos que trabajan con sprints en paralelo dentro de un trimestre, un toggle opcional (desactivado por defecto) permite indicar el número de **Sprint** junto con su **propio rango de fechas independiente del RC** (el sprint suele correr en paralelo y no coincidir con el ciclo de Release Candidate). Al activarlo se muestra una etiqueta tipo `Q1 · Sprint 2` junto al RC activo en el Dashboard, el widget de barra de menús, el widget de escritorio y el Centro de Control.
+    *   **Quarter (Q) derivado automáticamente:** El trimestre no se edita a mano; se calcula del **mes de inicio del sprint** según los trimestres calendario (**Q1** ene–mar, **Q2** abr–jun, **Q3** jul–sep, **Q4** oct–dic). Al cambiar el rango del sprint, el Q se actualiza solo.
+    *   **Auto-avance del Sprint:** Igual que el RC, cuando el rango del sprint vence, el número de sprint se **incrementa automáticamente** y el rango se desplaza hacia adelante heredando su duración (con *catch-up* en bucle si pasaron varios periodos). Como el Q se deriva de la fecha, el trimestre avanza junto con el sprint (p. ej. un sprint que cruza de marzo a abril pasa de Q1 a Q2).
+*   **Dashboard con Scroll:** La columna de configuración es desplazable, de modo que todo el contenido sigue accesible incluso cuando la ventana es pequeña.
 *   **Historial y Archivo Automático:** Un panel derecho que recopila y muestra de forma cronológica inversa todos los ciclos finalizados con un check verde de completado, su rango de fechas y la duración total. Cuenta con la opción de limpiar el historial cuando se desee.
 *   **Preferencias:** Toggle para mostrar u ocultar el icono de la barra de menús, más una guía para añadir el widget al escritorio y el control al Centro de Control.
 
 ### 2. Widget de WidgetKit para Escritorio y Centro de Notificaciones (`RCProgressWidget`)
 *   **Extensión Nativa de WidgetKit:** Corre en su propio proceso (`RCWidgetExtension`) y comparte los datos del ciclo con la app mediante un **App Group** (`group.dev.erikfloresq.RCWidget`).
 *   **Diseño del Anillo Glassmórfico:** Reutiliza el medidor circular con degradado dinámico (Cian ➡️ Azul ➡️ Púrpura) que ilustra el porcentaje completado del ciclo.
-*   **Tamaños Pequeño y Mediano:** El tamaño pequeño muestra el anillo; el mediano añade barra de progreso lineal, días transcurridos y tiempo restante.
+*   **Tamaños Pequeño y Mediano:** El tamaño pequeño usa un diseño lineal/compacto (el mismo del widget de barra de menús: título, etiqueta opcional de Q/Sprint, barra de progreso lineal, días transcurridos y tiempo restante), ya que el espacio no permite el anillo circular. El tamaño mediano sí muestra el anillo de progreso junto a la barra lineal y los detalles.
 *   **Timeline Actualizada:** Genera entradas horarias para mantener frescos el contador de días, la barra de progreso y el texto de tiempo restante. La app llama a `WidgetCenter.reloadAllTimelines()` cada vez que cambian los datos.
 
 ### 3. Control del Centro de Control (`RCStatusControl`)

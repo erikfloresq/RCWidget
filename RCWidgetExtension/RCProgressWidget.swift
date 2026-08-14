@@ -85,23 +85,61 @@ struct RCProgressWidgetView: View {
     }
 
     // MARK: Small
+    //
+    // El tamaño pequeño no tiene espacio para el anillo circular, así que usa el
+    // mismo diseño lineal/compacto del widget de la barra de menús: encabezado,
+    // etiqueta opcional de Q/Sprint, título, barra de progreso lineal y el
+    // contador de días con el tiempo restante.
 
     private var smallBody: some View {
-        VStack(spacing: 8) {
+        VStack(alignment: .leading, spacing: 6) {
             header
-            RCProgressRing(
-                progress: entry.cycle.progress(asOf: entry.date),
-                title: entry.cycle.title,
-                subtitle: String(localized: "Día \(entry.cycle.daysElapsed(asOf: entry.date)) de \(entry.cycle.durationDays)")
-            )
-            .frame(maxHeight: .infinity)
+
+            if let qsLabel = entry.cycle.quarterSprintLabel {
+                Text(qsLabel)
+                    .font(.system(size: 9, weight: .black))
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Color.purple.opacity(0.35), in: Capsule())
+                    .lineLimit(1)
+                    .minimumScaleFactor(0.7)
+            }
+
+            Text(entry.cycle.title)
+                .font(.system(size: 24, weight: .bold, design: .rounded))
+                .foregroundStyle(.white)
+                .lineLimit(1)
+                .minimumScaleFactor(0.5)
+
+            Spacer(minLength: 0)
+
+            // Linear progress bar
+            GeometryReader { geo in
+                ZStack(alignment: .leading) {
+                    Capsule()
+                        .fill(Color.white.opacity(0.10))
+                        .frame(height: 6)
+                    Capsule()
+                        .fill(LinearGradient(colors: [.cyan, .blue], startPoint: .leading, endPoint: .trailing))
+                        .frame(width: max(6, geo.size.width * CGFloat(entry.cycle.progress(asOf: entry.date))), height: 6)
+                }
+            }
+            .frame(height: 6)
+
+            Text("Día \(entry.cycle.daysElapsed(asOf: entry.date)) de \(entry.cycle.durationDays)")
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(.white.opacity(0.6))
+                .lineLimit(1)
+                .minimumScaleFactor(0.7)
 
             Text(entry.cycle.timeRemainingText(asOf: entry.date))
-                .font(.system(size: 10, weight: .medium, design: .rounded))
-                .foregroundStyle(.white)
+                .font(.system(size: 10, weight: .semibold))
+                .foregroundStyle(.white.opacity(0.9))
                 .lineLimit(1)
                 .minimumScaleFactor(0.7)
         }
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
     }
 
     // MARK: Medium
@@ -117,6 +155,17 @@ struct RCProgressWidgetView: View {
 
             VStack(alignment: .leading, spacing: 10) {
                 header
+
+                if let qsLabel = entry.cycle.quarterSprintLabel {
+                    Text(qsLabel)
+                        .font(.system(size: 9, weight: .black))
+                        .foregroundStyle(.white)
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(Color.purple.opacity(0.35), in: Capsule())
+                        .lineLimit(1)
+                        .minimumScaleFactor(0.7)
+                }
 
                 Text(entry.cycle.title)
                     .font(.system(size: 22, weight: .bold, design: .rounded))

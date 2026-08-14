@@ -1,6 +1,16 @@
 {
   "sourceLanguage" : "es",
   "strings" : {
+    "Q%lld · Sprint %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q%1$lld · Sprint %2$lld"
+          }
+        }
+      }
+    },
     "¡Ciclo Completado!" : {
       "localizations" : {
         "en" : {
