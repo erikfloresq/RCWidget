@@ -541,8 +541,10 @@ struct DashboardView: View {
                         Text(manager.activeCycle.title)
                             .font(.system(size: 28, weight: .bold, design: .rounded))
 
-                        if let qsLabel = manager.activeCycle.quarterSprintLabel {
-                            Text(qsLabel)
+                        // Se muestra sólo si la opción de Q/Sprint está activada
+                        // (refleja el toggle en vivo para ocultarse de inmediato).
+                        if editQuarterSprintEnabled {
+                            Text("Q\(editQuarter) · Sprint \(editSprint)")
                                 .font(.system(size: 11, weight: .black))
                                 .foregroundColor(.purple)
                                 .padding(.horizontal, 8)
@@ -587,8 +589,8 @@ struct DashboardView: View {
                         .font(.system(size: 11, weight: .medium))
                         .foregroundColor(.secondary)
 
-                    if manager.activeCycle.quarterSprintEnabled {
-                        Text("Rango Q/Sprint: \(formatFullDate(manager.activeCycle.quarterSprintStartDate)) al \(formatFullDate(manager.activeCycle.quarterSprintEndDate))")
+                    if editQuarterSprintEnabled {
+                        Text("Rango Q/Sprint: \(formatFullDate(editQuarterSprintStartDate)) al \(formatFullDate(editQuarterSprintEndDate))")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundColor(.purple.opacity(0.9))
                     }
