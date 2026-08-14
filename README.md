@@ -36,7 +36,7 @@ Widget nativo con el diseño del anillo de progreso glassmórfico, disponible en
 ### 2. Widget de WidgetKit para Escritorio y Centro de Notificaciones (`RCProgressWidget`)
 *   **Extensión Nativa de WidgetKit:** Corre en su propio proceso (`RCWidgetExtension`) y comparte los datos del ciclo con la app mediante un **App Group** (`group.dev.erikfloresq.RCWidget`).
 *   **Diseño del Anillo Glassmórfico:** Reutiliza el medidor circular con degradado dinámico (Cian ➡️ Azul ➡️ Púrpura) que ilustra el porcentaje completado del ciclo.
-*   **Tamaños Pequeño y Mediano:** El tamaño pequeño muestra el anillo; el mediano añade barra de progreso lineal, días transcurridos y tiempo restante.
+*   **Tamaños Pequeño y Mediano:** El tamaño pequeño usa un diseño lineal/compacto (el mismo del widget de barra de menús: título, etiqueta opcional de Q/Sprint, barra de progreso lineal, días transcurridos y tiempo restante), ya que el espacio no permite el anillo circular. El tamaño mediano sí muestra el anillo de progreso junto a la barra lineal y los detalles.
 *   **Timeline Actualizada:** Genera entradas horarias para mantener frescos el contador de días, la barra de progreso y el texto de tiempo restante. La app llama a `WidgetCenter.reloadAllTimelines()` cada vez que cambian los datos.
 
 ### 3. Control del Centro de Control (`RCStatusControl`)
