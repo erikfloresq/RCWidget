@@ -34,7 +34,9 @@ struct RCControlValueProvider: ControlValueProvider {
     }
 
     func currentValue() async throws -> RCControlValue {
-        let cycle = RCStore.loadActiveCycle() ?? RCStore.placeholderCycle()
+        // Aplica rollover si el ciclo activo ya venció (la app puede llevar
+        // horas cerrada). Sin esto, el control mostraba el ciclo caducado.
+        let cycle = RCRollover.advanceStoredCycle(now: Date())
         let dayText = String(localized: "Día \(cycle.daysElapsed()) de \(cycle.durationDays)")
         let subtitle: String
         if let qsLabel = cycle.quarterSprintLabel {
