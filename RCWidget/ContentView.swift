@@ -250,6 +250,30 @@ struct MenuBarWidgetView: View {
     @ObservedObject var manager: RCCycleManager
     @Environment(\.openWindow) private var openWindow
 
+    /// Trae la ventana del dashboard al frente, resiliente al modo `.accessory`.
+    ///
+    /// Cuando la app está sin icono en el Dock (activation policy `.accessory`),
+    /// `openWindow(id:)` seguido de `NSApp.activate` no basta: si la ventana ya
+    /// existía pero estaba oculta, no sube al frente; si fue cerrada, no
+    /// siempre se reabre. Hay que localizar la `NSWindow` correspondiente y
+    /// forzar `makeKeyAndOrderFront` + `orderFrontRegardless`, y hacerlo en el
+    /// siguiente turno del runloop para dar tiempo a SwiftUI a materializarla.
+    private func openDashboard() {
+        openWindow(id: "dashboard")
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(50))
+            NSApp.activate(ignoringOtherApps: true)
+            let matches = NSApp.windows.filter { window in
+                window.identifier?.rawValue.contains("dashboard") == true
+                    || window.title == "RC Dashboard"
+            }
+            for window in matches {
+                window.makeKeyAndOrderFront(nil)
+                window.orderFrontRegardless()
+            }
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             // Widget Header Area
@@ -365,10 +389,7 @@ struct MenuBarWidgetView: View {
                 .buttonStyle(MenuBarButtonStyle())
 
                 // Open full dashboard settings
-                Button(action: {
-                    NSApp.activate(ignoringOtherApps: true)
-                    openWindow(id: "dashboard")
-                }) {
+                Button(action: openDashboard) {
                     HStack {
                         Image(systemName: "slider.horizontal.3")
                             .frame(width: 16)
@@ -430,6 +451,7 @@ struct MenuBarButtonStyle: ButtonStyle {
 struct DashboardView: View {
     @ObservedObject var manager: RCCycleManager
     @AppStorage("showMenuBarItem") private var showMenuBarItem = true
+    @AppStorage("hideDockIcon") private var hideDockIcon = false
 
     // Editing States
     @State private var editTitle: String = ""
@@ -786,6 +808,27 @@ struct DashboardView: View {
                         }
                     }
                     .toggleStyle(.checkbox)
+
+                    // Ocultar del Dock sólo tiene sentido si el menu bar está
+                    // activo: en caso contrario la app quedaría sin punto de
+                    // entrada. Se deshabilita y fuerza a false cuando toca.
+                    Toggle(isOn: $hideDockIcon) {
+                        HStack {
+                            Image(systemName: "dock.rectangle")
+                                .foregroundColor(.secondary)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Ocultar el icono del Dock")
+                                Text("Requiere el icono en la barra de menús activo.")
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                    .toggleStyle(.checkbox)
+                    .disabled(!showMenuBarItem)
+                    .onChange(of: showMenuBarItem) { _, newValue in
+                        if !newValue { hideDockIcon = false }
+                    }
                 }
                 .padding(.horizontal, 4)
 

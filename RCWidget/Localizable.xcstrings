@@ -297,6 +297,9 @@
         }
       }
     },
+    "Ocultar el icono del Dock" : {
+
+    },
     "PREFERENCIAS DE LA APLICACIÓN" : {
       "localizations" : {
         "en" : {
@@ -403,6 +406,9 @@
           }
         }
       }
+    },
+    "Requiere el icono en la barra de menús activo." : {
+
     },
     "Resetear Ciclos" : {
       "localizations" : {

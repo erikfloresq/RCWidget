@@ -9,18 +9,57 @@ import SwiftUI
 
 // MARK: - App Delegate
 
-/// Controla si la app termina al cerrar su última ventana. Cuando el icono de
-/// la barra de menús está activo, la app sigue viva en segundo plano (en el
-/// menu bar); si está desactivado, se cierra de forma normal.
+/// Aplica dos preferencias de comportamiento de aplicación:
+///
+/// - `showMenuBarItem`: si el icono de la barra de menús está activo, la app
+///   sigue viva al cerrar la última ventana. Si no, termina de forma normal.
+/// - `hideDockIcon`: cuando el menu bar está activo, permite ocultar el icono
+///   del Dock (y sacar la app del Cmd+Tab) cambiando la activation policy a
+///   `.accessory`. Si el usuario apaga el menu bar, la policy se fuerza a
+///   `.regular` automáticamente para no dejar la app sin punto de entrada.
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillFinishLaunching(_ notification: Notification) {
-        // Alinea el valor "crudo" de UserDefaults con el default de @AppStorage.
-        UserDefaults.standard.register(defaults: ["showMenuBarItem": true])
+        // Alinea los valores "crudos" de UserDefaults con los defaults de
+        // @AppStorage para que la primera lectura antes del primer set sea
+        // correcta (evita parpadeos al lanzar).
+        UserDefaults.standard.register(defaults: [
+            "showMenuBarItem": true,
+            "hideDockIcon": false
+        ])
+        applyActivationPolicy()
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(userDefaultsChanged),
+            name: UserDefaults.didChangeNotification,
+            object: nil
+        )
     }
 
     func applicationShouldTerminateAfterLastWindowClosed(_ sender: NSApplication) -> Bool {
         // Si el menu bar está activo, no terminar al cerrar la ventana.
         !UserDefaults.standard.bool(forKey: "showMenuBarItem")
+    }
+
+    @objc private func userDefaultsChanged() {
+        applyActivationPolicy()
+    }
+
+    /// Ajusta la activation policy según las preferencias actuales.
+    /// Ocultar el Dock sólo se aplica si el menu bar sigue activo — en caso
+    /// contrario la app quedaría inaccesible sin ventana ni icono.
+    private func applyActivationPolicy() {
+        let menuBarActive = UserDefaults.standard.bool(forKey: "showMenuBarItem")
+        let hideDock = UserDefaults.standard.bool(forKey: "hideDockIcon")
+        let target: NSApplication.ActivationPolicy = (menuBarActive && hideDock)
+            ? .accessory
+            : .regular
+        guard NSApp.activationPolicy() != target else { return }
+        NSApp.setActivationPolicy(target)
+        if target == .regular {
+            // Al volver de accessory a regular, la app estaba fuera del Dock
+            // y del Cmd+Tab; reactivarla trae su ventana al frente.
+            NSApp.activate(ignoringOtherApps: true)
+        }
     }
 }
 
