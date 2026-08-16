@@ -95,74 +95,22 @@ class RCCycleManager: ObservableObject {
         return "\(title) 2"
     }
 
-    // Verification & Automatic catch up loop
+    // Verification & Automatic catch up loop.
+    //
+    // Delega en `RCRollover.advance` para compartir la lógica exacta con la
+    // extensión de widget. El `didSet` de `activeCycle` / `pastCycles` ya
+    // persiste y recarga los widgets, así que aquí sólo aplicamos el resultado.
     func checkAndProgressCycle() {
-        let calendar = Calendar.current
-        var updated = false
-        let todayStart = calendar.startOfDay(for: Date())
-
-        while true {
-            let endDateStart = calendar.startOfDay(for: activeCycle.endDate)
-            // Next cycle starts the day after current active cycle end date
-            guard let nextCycleStart = calendar.date(byAdding: .day, value: 1, to: endDateStart) else { break }
-
-            // If today is equal to or past nextCycleStart, active cycle has finished!
-            if todayStart >= nextCycleStart {
-                // Save current active cycle to history
-                let completedCycle = RCCycle(
-                    id: activeCycle.id,
-                    title: activeCycle.title,
-                    startDate: activeCycle.startDate,
-                    endDate: activeCycle.endDate,
-                    durationDays: activeCycle.durationDays
-                )
-                pastCycles.append(completedCycle)
-
-                // Roll over
-                let nextTitle = incrementTitle(activeCycle.title)
-                let nextDuration = activeCycle.durationDays // Inherit duration
-
-                let nextStart = nextCycleStart
-
-                // End date is nextStart + duration - 1 day
-                var components = DateComponents()
-                components.day = nextDuration - 1
-                components.hour = 23
-                components.minute = 59
-                components.second = 59
-
-                guard let nextEnd = calendar.date(byAdding: components, to: nextStart) else { break }
-
-                activeCycle = RCCycle(
-                    id: UUID(),
-                    title: nextTitle,
-                    startDate: nextStart,
-                    endDate: nextEnd,
-                    durationDays: nextDuration,
-                    quarterSprintEnabled: activeCycle.quarterSprintEnabled,
-                    sprint: activeCycle.sprint,
-                    quarterSprintStartDate: activeCycle.quarterSprintStartDate,
-                    quarterSprintEndDate: activeCycle.quarterSprintEndDate
-                )
-                updated = true
-            } else {
-                break
-            }
-        }
-
-        // Auto-avance del sprint (independiente del RC): si su rango ya venció,
-        // incrementa el número de sprint y desplaza el rango hacia adelante. El
-        // quarter se recalcula solo a partir del mes de inicio.
-        let advanced = activeCycle.advancingSprint()
-        if advanced != activeCycle {
-            activeCycle = advanced
-            updated = true
-        }
-
-        if updated {
-            saveToStore()
-            objectWillChange.send()
-        }
+        let result = RCRollover.advance(
+            active: activeCycle,
+            past: pastCycles,
+            titleAdvancer: incrementTitle,
+            asOf: Date()
+        )
+        guard result.didChange else { return }
+        pastCycles = result.pastCycles
+        activeCycle = result.activeCycle
+        objectWillChange.send()
     }
 
     // Updates active cycle with manual configuration

@@ -4,116 +4,6 @@
     "" : {
 
     },
-    "El quarter (Q) se calcula automáticamente según el mes de inicio del sprint (Q1 ene–mar, Q2 abr–jun, Q3 jul–sep, Q4 oct–dic). El sprint avanza solo cuando su rango vence." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "The quarter (Q) is computed automatically from the sprint's start month (Q1 Jan–Mar, Q2 Apr–Jun, Q3 Jul–Sep, Q4 Oct–Dec). The sprint advances on its own when its range ends."
-          }
-        }
-      }
-    },
-    "Indica en qué Q y sprint del trimestre se encuentra el equipo. Tiene su propio rango de fechas, independiente del RC (ej: Q1 · Sprint 2)." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Indicates which Q and sprint of the quarter the team is on. It has its own date range, independent from the RC (e.g. Q1 · Sprint 2)."
-          }
-        }
-      }
-    },
-    "Inicio Q/Sprint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Q/Sprint start"
-          }
-        }
-      }
-    },
-    "Rango Q/Sprint: %@ al %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Q/Sprint range: %1$@ to %2$@"
-          }
-        }
-      }
-    },
-    "Rango RC: %@ al %@" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "RC range: %1$@ to %2$@"
-          }
-        }
-      }
-    },
-    "Término Q/Sprint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Q/Sprint end"
-          }
-        }
-      }
-    },
-    "Mostrar Quarter y Sprint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Show Quarter and Sprint"
-          }
-        }
-      }
-    },
-    "Q%lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Q%lld"
-          }
-        }
-      }
-    },
-    "Q%lld · Sprint %lld" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Q%1$lld · Sprint %2$lld"
-          }
-        }
-      }
-    },
-    "Quarter" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Quarter"
-          }
-        }
-      }
-    },
-    "Sprint" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sprint"
-          }
-        }
-      }
-    },
     "¡Ciclo Completado!" : {
       "localizations" : {
         "en" : {
@@ -133,6 +23,9 @@
           }
         }
       }
+    },
+    "%lld" : {
+
     },
     "%lld días" : {
       "localizations" : {
@@ -234,6 +127,16 @@
         }
       }
     },
+    "El quarter (Q) se calcula automáticamente según el mes de inicio del sprint (Q1 ene–mar, Q2 abr–jun, Q3 jul–sep, Q4 oct–dic). El sprint avanza solo cuando su rango vence." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The quarter (Q) is computed automatically from the sprint's start month (Q1 Jan–Mar, Q2 Apr–Jun, Q3 Jul–Sep, Q4 Oct–Dec). The sprint advances on its own when its range ends."
+          }
+        }
+      }
+    },
     "En curso" : {
       "localizations" : {
         "en" : {
@@ -324,6 +227,26 @@
         }
       }
     },
+    "Indica en qué Q y sprint del trimestre se encuentra el equipo. Tiene su propio rango de fechas, independiente del RC (ej: Q1 · Sprint 2)." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Indicates which Q and sprint of the quarter the team is on. It has its own date range, independent from the RC (e.g. Q1 · Sprint 2)."
+          }
+        }
+      }
+    },
+    "Inicio Q/Sprint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q/Sprint start"
+          }
+        }
+      }
+    },
     "Limpiar" : {
       "localizations" : {
         "en" : {
@@ -354,6 +277,16 @@
         }
       }
     },
+    "Mostrar Quarter y Sprint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Quarter and Sprint"
+          }
+        }
+      }
+    },
     "Nombre / Texto del Ciclo" : {
       "localizations" : {
         "en" : {
@@ -370,6 +303,36 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "APP PREFERENCES"
+          }
+        }
+      }
+    },
+    "Q%lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q%lld"
+          }
+        }
+      }
+    },
+    "Q%lld · Sprint %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q%1$lld · Sprint %2$lld"
+          }
+        }
+      }
+    },
+    "Quarter" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quarter"
           }
         }
       }
@@ -394,7 +357,28 @@
         }
       }
     },
+    "Rango Q/Sprint: %@ al %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q/Sprint range: %1$@ to %2$@"
+          }
+        }
+      }
+    },
+    "Rango RC: %@ al %@" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RC range: %1$@ to %2$@"
+          }
+        }
+      }
+    },
     "Rango: %@ al %@" : {
+      "extractionState" : "stale",
       "localizations" : {
         "en" : {
           "stringUnit" : {
@@ -456,6 +440,26 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "No History"
+          }
+        }
+      }
+    },
+    "Sprint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sprint"
+          }
+        }
+      }
+    },
+    "Término Q/Sprint" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Q/Sprint end"
           }
         }
       }

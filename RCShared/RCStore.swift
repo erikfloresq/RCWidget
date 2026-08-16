@@ -27,8 +27,12 @@ enum RCStore {
     }
 
     // MARK: - Active cycle
+    //
+    // Los overloads con parámetro `defaults:` permiten aislar el UserDefaults
+    // en tests (con un suite dedicado). En producción se usa el default del App
+    // Group.
 
-    static func loadActiveCycle() -> RCCycle? {
+    static func loadActiveCycle(from defaults: UserDefaults = RCStore.defaults) -> RCCycle? {
         guard let data = defaults.data(forKey: activeCycleKey),
               let cycle = try? JSONDecoder().decode(RCCycle.self, from: data) else {
             return nil
@@ -36,7 +40,7 @@ enum RCStore {
         return cycle
     }
 
-    static func saveActiveCycle(_ cycle: RCCycle) {
+    static func saveActiveCycle(_ cycle: RCCycle, to defaults: UserDefaults = RCStore.defaults) {
         if let data = try? JSONEncoder().encode(cycle) {
             defaults.set(data, forKey: activeCycleKey)
         }
@@ -44,7 +48,7 @@ enum RCStore {
 
     // MARK: - Past cycles
 
-    static func loadPastCycles() -> [RCCycle] {
+    static func loadPastCycles(from defaults: UserDefaults = RCStore.defaults) -> [RCCycle] {
         guard let data = defaults.data(forKey: pastCyclesKey),
               let cycles = try? JSONDecoder().decode([RCCycle].self, from: data) else {
             return []
@@ -52,7 +56,7 @@ enum RCStore {
         return cycles
     }
 
-    static func savePastCycles(_ cycles: [RCCycle]) {
+    static func savePastCycles(_ cycles: [RCCycle], to defaults: UserDefaults = RCStore.defaults) {
         if let data = try? JSONEncoder().encode(cycles) {
             defaults.set(data, forKey: pastCyclesKey)
         }

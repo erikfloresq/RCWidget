@@ -23,24 +23,45 @@ struct RCProvider: TimelineProvider {
     }
 
     func getSnapshot(in context: Context, completion: @escaping (RCEntry) -> Void) {
-        let cycle = RCStore.loadActiveCycle() ?? RCStore.placeholderCycle()
+        let cycle = Self.rolledOverCycle(now: Date())
         completion(RCEntry(date: Date(), cycle: cycle))
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<RCEntry>) -> Void) {
-        let cycle = RCStore.loadActiveCycle() ?? RCStore.placeholderCycle()
         let now = Date()
+        let cycle = Self.rolledOverCycle(now: now)
         let calendar = Calendar.current
+        let rollover = RCRollover.nextRolloverDate(after: cycle, calendar: calendar)
 
-        // Una entrada por hora durante 24 h para mantener frescos el contador
-        // de días, la barra de progreso y el texto de tiempo restante.
+        // Entradas horarias mientras el ciclo esté vigente, para que el contador
+        // de días, la barra de progreso y el texto restante avancen sin esperar
+        // a la próxima recarga de WidgetKit. Se cortan al momento del rollover
+        // para no mostrar un ciclo "completado" cuando debería haber avanzado.
         var entries: [RCEntry] = []
-        for hourOffset in 0..<24 {
-            let date = calendar.date(byAdding: .hour, value: hourOffset, to: now) ?? now
-            entries.append(RCEntry(date: date, cycle: cycle))
+        var pointer = now
+        while pointer < rollover && entries.count < 25 {
+            entries.append(RCEntry(date: pointer, cycle: cycle))
+            guard let next = calendar.date(byAdding: .hour, value: 1, to: pointer) else { break }
+            pointer = next
+        }
+        if entries.isEmpty {
+            entries.append(RCEntry(date: now, cycle: cycle))
         }
 
-        completion(Timeline(entries: entries, policy: .atEnd))
+        // .after(rollover) hace que WidgetKit pida un nuevo timeline en el
+        // instante exacto del rollover; el próximo getTimeline verá el ciclo ya
+        // avanzado gracias a rolledOverCycle(now:) y persistirá el nuevo estado.
+        completion(Timeline(entries: entries, policy: .after(rollover)))
+    }
+
+    /// Carga el ciclo activo, aplica el rollover si su rango ya venció y
+    /// persiste el resultado en el App Group. Se usa desde `getSnapshot` y
+    /// `getTimeline` para que el widget avance el ciclo incluso cuando la app
+    /// no está corriendo (antes, sólo la app lo hacía y el widget se quedaba
+    /// mostrando un ciclo caducado). Delega en el helper compartido para que
+    /// los tests puedan ejercitar exactamente el mismo flujo.
+    static func rolledOverCycle(now: Date) -> RCCycle {
+        RCRollover.advanceStoredCycle(now: now)
     }
 }
 
