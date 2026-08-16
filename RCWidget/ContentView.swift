@@ -430,6 +430,7 @@ struct MenuBarButtonStyle: ButtonStyle {
 struct DashboardView: View {
     @ObservedObject var manager: RCCycleManager
     @AppStorage("showMenuBarItem") private var showMenuBarItem = true
+    @AppStorage("hideDockIcon") private var hideDockIcon = false
 
     // Editing States
     @State private var editTitle: String = ""
@@ -786,6 +787,27 @@ struct DashboardView: View {
                         }
                     }
                     .toggleStyle(.checkbox)
+
+                    // Ocultar del Dock sólo tiene sentido si el menu bar está
+                    // activo: en caso contrario la app quedaría sin punto de
+                    // entrada. Se deshabilita y fuerza a false cuando toca.
+                    Toggle(isOn: $hideDockIcon) {
+                        HStack {
+                            Image(systemName: "dock.rectangle")
+                                .foregroundColor(.secondary)
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Ocultar el icono del Dock")
+                                Text("Requiere el icono en la barra de menús activo.")
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.secondary)
+                            }
+                        }
+                    }
+                    .toggleStyle(.checkbox)
+                    .disabled(!showMenuBarItem)
+                    .onChange(of: showMenuBarItem) { _, newValue in
+                        if !newValue { hideDockIcon = false }
+                    }
                 }
                 .padding(.horizontal, 4)
 
