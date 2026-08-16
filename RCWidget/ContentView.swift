@@ -250,6 +250,30 @@ struct MenuBarWidgetView: View {
     @ObservedObject var manager: RCCycleManager
     @Environment(\.openWindow) private var openWindow
 
+    /// Trae la ventana del dashboard al frente, resiliente al modo `.accessory`.
+    ///
+    /// Cuando la app está sin icono en el Dock (activation policy `.accessory`),
+    /// `openWindow(id:)` seguido de `NSApp.activate` no basta: si la ventana ya
+    /// existía pero estaba oculta, no sube al frente; si fue cerrada, no
+    /// siempre se reabre. Hay que localizar la `NSWindow` correspondiente y
+    /// forzar `makeKeyAndOrderFront` + `orderFrontRegardless`, y hacerlo en el
+    /// siguiente turno del runloop para dar tiempo a SwiftUI a materializarla.
+    private func openDashboard() {
+        openWindow(id: "dashboard")
+        Task { @MainActor in
+            try? await Task.sleep(for: .milliseconds(50))
+            NSApp.activate(ignoringOtherApps: true)
+            let matches = NSApp.windows.filter { window in
+                window.identifier?.rawValue.contains("dashboard") == true
+                    || window.title == "RC Dashboard"
+            }
+            for window in matches {
+                window.makeKeyAndOrderFront(nil)
+                window.orderFrontRegardless()
+            }
+        }
+    }
+
     var body: some View {
         VStack(spacing: 0) {
             // Widget Header Area
@@ -365,10 +389,7 @@ struct MenuBarWidgetView: View {
                 .buttonStyle(MenuBarButtonStyle())
 
                 // Open full dashboard settings
-                Button(action: {
-                    NSApp.activate(ignoringOtherApps: true)
-                    openWindow(id: "dashboard")
-                }) {
+                Button(action: openDashboard) {
                     HStack {
                         Image(systemName: "slider.horizontal.3")
                             .frame(width: 16)
