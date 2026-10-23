@@ -2,7 +2,7 @@
   "sourceLanguage" : "es",
   "strings" : {
     "" : {
-
+      "shouldTranslate" : false
     },
     "¡Ciclo Completado!" : {
       "localizations" : {
@@ -15,24 +15,47 @@
       }
     },
     "%@ - %@" : {
-      "localizations" : {
-        "es" : {
-          "stringUnit" : {
-            "state" : "new",
-            "value" : "%1$@ - %2$@"
-          }
-        }
-      }
+      "shouldTranslate" : false
     },
     "%lld" : {
-
+      "shouldTranslate" : false
     },
     "%lld días" : {
       "localizations" : {
+        "es" : {
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld día"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld días"
+                }
+              }
+            }
+          }
+        },
         "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "%lld days"
+          "variations" : {
+            "plural" : {
+              "one" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld day"
+                }
+              },
+              "other" : {
+                "stringUnit" : {
+                  "state" : "translated",
+                  "value" : "%lld days"
+                }
+              }
+            }
           }
         }
       }
@@ -298,7 +321,14 @@
       }
     },
     "Ocultar el icono del Dock" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hide Dock icon"
+          }
+        }
+      }
     },
     "PREFERENCIAS DE LA APLICACIÓN" : {
       "localizations" : {
@@ -380,22 +410,11 @@
         }
       }
     },
-    "Rango: %@ al %@" : {
-      "extractionState" : "stale",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Range: %1$@ to %2$@"
-          }
-        }
-      }
-    },
     "RC Dashboard" : {
-
+      "shouldTranslate" : false
     },
     "RCWidget" : {
-
+      "shouldTranslate" : false
     },
     "Release Candidates completados" : {
       "localizations" : {
@@ -408,7 +427,14 @@
       }
     },
     "Requiere el icono en la barra de menús activo." : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Requires the menu bar icon to be enabled."
+          }
+        }
+      }
     },
     "Resetear Ciclos" : {
       "localizations" : {
