@@ -496,22 +496,22 @@
         }
       }
     },
-    "v1.0.0 • Hecho en macOS" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "v1.0.0 • Made on macOS"
-          }
-        }
-      }
-    },
     "WIDGET DE ESCRITORIO Y CENTRO DE CONTROL" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
             "value" : "DESKTOP WIDGET & CONTROL CENTER"
+          }
+        }
+      }
+    },
+    "v%@ • Hecho con ❤️" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "v%@ • Made with ❤️"
           }
         }
       }

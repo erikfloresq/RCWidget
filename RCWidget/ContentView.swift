@@ -867,7 +867,7 @@ struct DashboardView: View {
 
                     Spacer()
 
-                    Text("v1.0.0 • Hecho en macOS")
+                    Text("v\(appVersion) • Hecho con ❤️")
                         .font(.system(size: 9))
                         .foregroundColor(.secondary)
                 }
@@ -1002,6 +1002,11 @@ struct DashboardView: View {
 
     private func formatShortDate(_ date: Date) -> String {
         date.formatted(date: .numeric, time: .omitted)
+    }
+
+    /// Versión real de la app (MARKETING_VERSION) leída del Info.plist.
+    private var appVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
     }
 }
 
