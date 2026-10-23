@@ -13,7 +13,7 @@
 
 import Foundation
 
-enum RCRollover {
+nonisolated enum RCRollover {
     /// Resultado de una iteración de rollover.
     struct Result: Equatable {
         var activeCycle: RCCycle

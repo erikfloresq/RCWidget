@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Data Model
 
-struct RCCycle: Codable, Identifiable, Equatable {
+nonisolated struct RCCycle: Codable, Identifiable, Equatable {
     var id: UUID
     var title: String
     var startDate: Date
@@ -122,7 +122,7 @@ struct RCCycle: Codable, Identifiable, Equatable {
 
 // MARK: - Quarter / Sprint label
 
-extension RCCycle {
+nonisolated extension RCCycle {
     /// Etiqueta "Q1 · Sprint 2" cuando la función está activada; `nil` si no.
     var quarterSprintLabel: String? {
         guard quarterSprintEnabled else { return nil }
@@ -132,7 +132,7 @@ extension RCCycle {
 
 // MARK: - Sprint auto-advance (puro, basado en una fecha de referencia)
 
-extension RCCycle {
+nonisolated extension RCCycle {
     /// Devuelve una copia del ciclo con el sprint avanzado hasta que su rango de
     /// fechas contenga a `now`. Por cada periodo de sprint ya vencido incrementa
     /// el número de sprint y desplaza el rango hacia adelante (heredando la misma
@@ -174,7 +174,7 @@ extension RCCycle {
 
 // MARK: - Derived progress helpers (pure, based on a reference date)
 
-extension RCCycle {
+nonisolated extension RCCycle {
     private func daysBetweenInclusive(start: Date, end: Date) -> Int {
         let calendar = Calendar.current
         let startDay = calendar.startOfDay(for: start)
