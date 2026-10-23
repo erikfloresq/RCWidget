@@ -607,7 +607,7 @@ struct DashboardView: View {
                             .font(.system(size: 11, weight: .bold))
                         TextField("Ej: RC 1", text: $editTitle)
                             .textFieldStyle(.roundedBorder)
-                            .onChange(of: editTitle) { _ in checkForChanges() }
+                            .onChange(of: editTitle) { checkForChanges() }
                     }
 
                     HStack(spacing: 16) {
@@ -616,7 +616,7 @@ struct DashboardView: View {
                                 .font(.system(size: 11, weight: .bold))
                             DatePicker("", selection: $editStartDate, displayedComponents: .date)
                                 .labelsHidden()
-                                .onChange(of: editStartDate) { _ in checkForChanges() }
+                                .onChange(of: editStartDate) { checkForChanges() }
                         }
 
                         VStack(alignment: .leading, spacing: 6) {
@@ -624,7 +624,7 @@ struct DashboardView: View {
                                 .font(.system(size: 11, weight: .bold))
                             DatePicker("", selection: $editEndDate, displayedComponents: .date)
                                 .labelsHidden()
-                                .onChange(of: editEndDate) { _ in checkForChanges() }
+                                .onChange(of: editEndDate) { checkForChanges() }
                         }
 
                         Spacer()
@@ -656,7 +656,7 @@ struct DashboardView: View {
                             }
                         }
                         .toggleStyle(.switch)
-                        .onChange(of: editQuarterSprintEnabled) { newValue in
+                        .onChange(of: editQuarterSprintEnabled) { _, newValue in
                             // Aplica de inmediato la preferencia de visualización
                             // para que el menú de barra y los widgets se refresquen
                             // sin esperar a "Guardar Cambios".
@@ -675,7 +675,7 @@ struct DashboardView: View {
                                             .foregroundColor(.purple)
                                     }
                                 }
-                                .onChange(of: editSprint) { _ in checkForChanges() }
+                                .onChange(of: editSprint) { checkForChanges() }
 
                                 // Quarter derivado (solo lectura): depende del mes de inicio.
                                 HStack(spacing: 6) {
@@ -707,7 +707,7 @@ struct DashboardView: View {
                                         .font(.system(size: 11, weight: .bold))
                                     DatePicker("", selection: $editQuarterSprintStartDate, displayedComponents: .date)
                                         .labelsHidden()
-                                        .onChange(of: editQuarterSprintStartDate) { _ in checkForChanges() }
+                                        .onChange(of: editQuarterSprintStartDate) { checkForChanges() }
                                 }
 
                                 VStack(alignment: .leading, spacing: 6) {
@@ -715,7 +715,7 @@ struct DashboardView: View {
                                         .font(.system(size: 11, weight: .bold))
                                     DatePicker("", selection: $editQuarterSprintEndDate, displayedComponents: .date)
                                         .labelsHidden()
-                                        .onChange(of: editQuarterSprintEndDate) { _ in checkForChanges() }
+                                        .onChange(of: editQuarterSprintEndDate) { checkForChanges() }
                                 }
 
                                 Spacer()
@@ -867,7 +867,7 @@ struct DashboardView: View {
 
                     Spacer()
 
-                    Text("v1.0.0 • Hecho en macOS")
+                    Text("v\(appVersion) • Hecho con ❤️")
                         .font(.system(size: 9))
                         .foregroundColor(.secondary)
                 }
@@ -1002,6 +1002,11 @@ struct DashboardView: View {
 
     private func formatShortDate(_ date: Date) -> String {
         date.formatted(date: .numeric, time: .omitted)
+    }
+
+    /// Versión real de la app (MARKETING_VERSION) leída del Info.plist.
+    private var appVersion: String {
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "?"
     }
 }
 

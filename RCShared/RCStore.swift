@@ -9,7 +9,7 @@
 
 import Foundation
 
-enum RCStore {
+nonisolated enum RCStore {
     /// App Group compartido por la app y la extensión de widget.
     static let appGroupIdentifier = "group.dev.erikfloresq.RCWidget"
 

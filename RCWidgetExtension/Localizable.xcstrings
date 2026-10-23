@@ -92,10 +92,10 @@
       }
     },
     "RC Tracker" : {
-
+      "shouldTranslate" : false
     },
     "RC TRACKER" : {
-
+      "shouldTranslate" : false
     }
   },
   "version" : "1.0"
