@@ -1,0 +1,33 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Xcode — datos por usuario
+xcuserdata/
+*.xcuserstate
+*.xcscmblueprint
+*.xccheckout
+
+# Xcode — productos y artefactos de build
+build/
+DerivedData/
+*.moved-aside
+*.hmap
+*.ipa
+*.dSYM.zip
+*.dSYM
+*.xcresult
+
+# Xcode Cloud
+RCWidget.xcodeproj/xcshareddata/xcodecloud/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Claude Code — ajustes locales
+.claude/settings.local.json
