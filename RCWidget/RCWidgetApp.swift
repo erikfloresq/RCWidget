@@ -17,6 +17,7 @@ import SwiftUI
 ///   del Dock (y sacar la app del Cmd+Tab) cambiando la activation policy a
 ///   `.accessory`. Si el usuario apaga el menu bar, la policy se fuerza a
 ///   `.regular` automáticamente para no dejar la app sin punto de entrada.
+@MainActor
 final class AppDelegate: NSObject, NSApplicationDelegate {
     func applicationWillFinishLaunching(_ notification: Notification) {
         // Alinea los valores "crudos" de UserDefaults con los defaults de
@@ -40,8 +41,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         !UserDefaults.standard.bool(forKey: "showMenuBarItem")
     }
 
-    @objc private func userDefaultsChanged() {
-        applyActivationPolicy()
+    @objc nonisolated private func userDefaultsChanged() {
+        Task { @MainActor [weak self] in
+            self?.applyActivationPolicy()
+        }
     }
 
     /// Ajusta la activation policy según las preferencias actuales.
