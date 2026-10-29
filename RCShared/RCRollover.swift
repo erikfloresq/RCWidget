@@ -15,7 +15,7 @@ import Foundation
 
 nonisolated enum RCRollover {
     /// Resultado de una iteración de rollover.
-    struct Result: Equatable {
+    struct Result: Equatable, Sendable {
         var activeCycle: RCCycle
         var pastCycles: [RCCycle]
         /// `true` si hubo algún cambio (rollover del RC o auto-avance del sprint).

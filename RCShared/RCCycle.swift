@@ -10,7 +10,7 @@ import Foundation
 
 // MARK: - Data Model
 
-nonisolated struct RCCycle: Codable, Identifiable, Equatable {
+nonisolated struct RCCycle: Codable, Identifiable, Equatable, Sendable {
     var id: UUID
     var title: String
     var startDate: Date

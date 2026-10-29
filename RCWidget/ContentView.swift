@@ -12,7 +12,8 @@ import WidgetKit
 
 // MARK: - 1. CYCLE MANAGER
 
-class RCCycleManager: ObservableObject {
+@MainActor
+final class RCCycleManager: ObservableObject {
     @Published var activeCycle: RCCycle {
         didSet {
             saveToStore()

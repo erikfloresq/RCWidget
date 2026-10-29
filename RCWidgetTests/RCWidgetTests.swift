@@ -12,14 +12,19 @@ import Foundation
 struct RCWidgetTests {
 
     @Test("Test Title Increment Logic")
-    func testTitleIncrement() {
-        let manager = RCCycleManager()
-        
-        #expect(manager.incrementTitle("RC 1") == "RC 2")
-        #expect(manager.incrementTitle("RC 9") == "RC 10")
-        #expect(manager.incrementTitle("Sprint 5") == "Sprint 6")
-        #expect(manager.incrementTitle("Sprint") == "Sprint 2")
-        #expect(manager.incrementTitle("RC 2026") == "RC 2027")
+    func testTitleIncrement() async {
+        let titles = await MainActor.run {
+            let manager = RCCycleManager()
+            return [
+                manager.incrementTitle("RC 1"),
+                manager.incrementTitle("RC 9"),
+                manager.incrementTitle("Sprint 5"),
+                manager.incrementTitle("Sprint"),
+                manager.incrementTitle("RC 2026")
+            ]
+        }
+
+        #expect(titles == ["RC 2", "RC 10", "Sprint 6", "Sprint 2", "RC 2027"])
     }
 
     @Test("Test Cycle Initialization and Days Calculation")

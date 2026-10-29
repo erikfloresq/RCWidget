@@ -13,8 +13,8 @@ import AppIntents
 // MARK: - Intent para abrir la app
 
 struct RCOpenAppIntent: AppIntent {
-    static var title: LocalizedStringResource = "Abrir RCWidget"
-    static var openAppWhenRun: Bool = true
+    static let title: LocalizedStringResource = "Abrir RCWidget"
+    static let openAppWhenRun: Bool = true
 
     func perform() async throws -> some IntentResult {
         .result()
